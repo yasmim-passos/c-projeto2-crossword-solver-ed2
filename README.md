@@ -36,7 +36,7 @@ Aplicar na prática conceitos de:
 * Linguagem: **C**
 * Gráficos: **Raylib**
 * Algoritmo principal: **Backtracking**
-* Plataforma: Windows / Linux
+* Plataforma: Windows 
 
 ---
 
