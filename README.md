@@ -84,7 +84,7 @@ Em desenvolvimento acadêmico.
 
 ## 👥 Equipe
 
-* Daiane Santos (daianrsnts)
+* Daiane Santos (daianesnts)
 * Guilhereme Seixas (guilheeme1108-prog)
 * Igor Dias (iidias)
 * Yasmim Passos (yasmim-passos)
