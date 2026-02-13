@@ -18,16 +18,6 @@ void inicializarGrid(Grid* grid, int linhas, int colunas) {
     }
 }
 
-// ... ehPosicaoValida ... obterCelula ... (unchanged)
-
-// ... limparGrid ... (unchanged)
-
-// ... obterPalavra ... (unchanged)
-
-// ... gridEstaCompleto ... (unchanged)
-
-// End of file
-
 bool ehPosicaoValida(Grid* grid, int linha, int coluna) {
     if (!grid) return false;
     return (linha >= 0 && linha < grid->linhas && coluna >= 0 && coluna < grid->colunas);
@@ -145,3 +135,4 @@ void removerPalavra(Grid* grid, Palavra* palavra) {
         else r++;
     }
 }
+
