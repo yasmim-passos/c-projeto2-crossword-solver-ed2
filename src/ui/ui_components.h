@@ -5,14 +5,17 @@
 #include <stdbool.h>
 
 // Modern Color Palette
-#define UI_COLOR_BG           CLITERAL(Color){ 236, 240, 241, 255 } // Clouds
-#define UI_COLOR_PRIMARY      CLITERAL(Color){ 52, 152, 219, 255 }  // Peter River
-#define UI_COLOR_ACCENT       CLITERAL(Color){ 230, 126, 34, 255 }  // Carrot
-#define UI_COLOR_TEXT         CLITERAL(Color){ 44, 62, 80, 255 }    // Midnight Blue
-#define UI_COLOR_BUTTON       CLITERAL(Color){ 189, 195, 199, 255 } // Silver
-#define UI_COLOR_BUTTON_HOVER CLITERAL(Color){ 149, 165, 166, 255 } // Concrete
-#define UI_COLOR_GRID_BLACK   CLITERAL(Color){ 44, 62, 80, 255 }
-#define UI_COLOR_SELECTION    CLITERAL(Color){ 130, 204, 221, 150 } // Semi-transparent Blue
+// COLORS - Blue & Yellow Theme
+#define UI_COLOR_PRIMARY      (Color){ 70, 160, 240, 255 }   // Lighter Sky Blue (Buttons, Headers)
+#define UI_COLOR_SECONDARY    (Color){ 255, 204, 0, 255 }    // Yellow (Accents)
+#define UI_COLOR_ACCENT       (Color){ 255, 240, 100, 255 }  // Light Yellow (Selection)
+#define UI_COLOR_BG           (Color){ 245, 250, 255, 255 }  // Very pale blue/white (Background)
+#define UI_COLOR_TEXT         (Color){ 20, 30, 60, 255 }     // Dark Blue/Black (Text)
+#define UI_COLOR_BUTTON       (Color){ 70, 160, 240, 255 }   // Lighter Sky Blue
+#define UI_COLOR_BUTTON_HOVER (Color){ 100, 180, 250, 255 }  // Even Lighter Blue
+#define UI_COLOR_GRID_LINE    (Color){ 40, 100, 180, 255 }   // Mid Blue Lines
+#define UI_COLOR_BLOCK        (Color){ 70, 160, 240, 255 }   // Lighter Sky Blue Blocks
+#define UI_COLOR_CORRECT      (Color){ 46, 204, 113, 255 }   // Green (Correct)
 
 // Draw a styled button with rounded corners and hover effect
 bool GuiButton(Rectangle rect, const char* text);

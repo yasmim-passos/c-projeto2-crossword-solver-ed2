@@ -1,7 +1,7 @@
 #ifndef VALIDATION_H
 #define VALIDATION_H
 
-#include "../structs.h"
+#include "../data/structs.h"
 #include <stdbool.h>
 
 /*
@@ -118,5 +118,6 @@ bool validarConflitos(Grid *grid, Palavra *palavra);
  *   Número de letras que já coincidem (0 a tamanho da palavra)
  */
 int contarLetrasCorretas(Grid *grid, Palavra *palavra, const char *texto);
+
 
 #endif // VALIDATION_H

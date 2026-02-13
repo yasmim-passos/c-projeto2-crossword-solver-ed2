@@ -1,5 +1,5 @@
 #include "validation.h"
-#include "../grid.h"
+#include "../data/grid.h"
 #include <ctype.h>
 #include <stddef.h>
 #include <stdio.h>

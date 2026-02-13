@@ -31,7 +31,7 @@ bool GuiButton(Rectangle rect, const char* text) {
     }
 
     DrawRectangleRounded(drawRect, 0.2f, 10, color);
-    DrawRectangleRoundedLines(drawRect, 0.2f, 10, 2, WHITE);
+    DrawRectangleRoundedLines(drawRect, 0.2f, 10, WHITE);
     
     int fontSize = 20;
     int textWidth = MeasureText(text, fontSize);
@@ -58,7 +58,7 @@ void DrawTextWrapped(const char *text, Rectangle rec, int fontSize, Color color)
     // Basic word wrapping implementation
     if (!text || strlen(text) == 0) return;
 
-    int textLen = strlen(text);
+    // int textLen = strlen(text); // Removed unused variable
     int currentLineY = (int)rec.y;
     int currentLineX = (int)rec.x;
     int lineHeight = fontSize + 2;

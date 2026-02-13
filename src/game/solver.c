@@ -1,6 +1,7 @@
 #include "solver.h"
 #include "../data/dictionary.h"
-#include "../grid.h"
+#include <stdlib.h>
+#include "../data/grid.h"
 #include "validation.h"
 #include <stddef.h>
 #include <stdio.h>
@@ -24,7 +25,7 @@ static bool backtrack(Grid *grid, int indicePalavra, EstadoSolver *estado);
  * Retorna o índice da próxima palavra que ainda não foi
  * completamente preenchida, ou -1 se todas estão completas.
  */
-static int encontrarProximaPalavraVazia(Grid *grid);
+// static int encontrarProximaPalavraVazia(Grid *grid);
 
 /*
  * Obtém candidatos do dicionário para uma palavra
@@ -217,6 +218,7 @@ static bool backtrack(Grid *grid, int indicePalavra, EstadoSolver *estado) {
   return false;
 }
 
+/*
 static int encontrarProximaPalavraVazia(Grid *grid) {
   if (grid == NULL) {
     return -1;
@@ -234,6 +236,7 @@ static int encontrarProximaPalavraVazia(Grid *grid) {
   // Todas as palavras estão completas
   return -1;
 }
+*/
 
 static void obterCandidatos(int tamanho, char ***candidatos,
                             int *numCandidatos) {

@@ -58,15 +58,38 @@ bool dict_check_word(const char* word, char* out_def, int max_len) {
     }
     
     // 2. Fallback to Local File
-    // Assuming relative path from executable or project root. 
-    // Adapting path as requested.
-    if (check_local_dictionary("data_files/dictionaries/en.txt", word, out_def, max_len)) {
-        return true;
+    // Try multiple paths to find the dictionary file
+    const char* paths[] = {
+        "data_files/dictionaries/en.txt",
+        "../data_files/dictionaries/en.txt",
+        "../../data_files/dictionaries/en.txt"
+    };
+    const char* pathsPT[] = {
+        "data_files/dictionaries/pt.txt",
+        "../data_files/dictionaries/pt.txt",
+        "../../data_files/dictionaries/pt.txt"
+    };
+
+    bool found = false;
+    
+    // Check EN (or requested language - basic logic for now)
+    for(int i=0; i<3; i++) {
+        if(check_local_dictionary(paths[i], word, out_def, max_len)) {
+            found = true;
+            break;
+        }
     }
-    // Try PT as well if needed, or based on config. For now trying EN then PT.
-    if (check_local_dictionary("data_files/dictionaries/pt.txt", word, out_def, max_len)) {
-         return true;
+    
+    if(!found) {
+        for(int i=0; i<3; i++) {
+            if(check_local_dictionary(pathsPT[i], word, out_def, max_len)) {
+                found = true;
+                break;
+            }
+        }
     }
+    
+    if (found) return true;
     
     return false;
 }
