@@ -55,45 +55,64 @@ void DrawTextCentered(const char* text, int cx, int cy, int fontSize, Color colo
 }
 
 void DrawTextWrapped(const char *text, Rectangle rec, int fontSize, Color color) {
-    // Basic word wrapping implementation
     if (!text || strlen(text) == 0) return;
 
-    // int textLen = strlen(text); // Removed unused variable
     int currentLineY = (int)rec.y;
     int currentLineX = (int)rec.x;
-    int lineHeight = fontSize + 2;
+    int lineHeight = fontSize + 4; // Add some spacing
     
-    char buffer[1024]; // Safe buffer for typical definition length
-    strncpy(buffer, text, 1023);
-    buffer[1023] = '\0';
+    // Copy text to modify or parse
+    // We will parse character by character to handle \n and spaces
+    const char* ptr = text;
+    char wordBuffer[256];
+    int wordLen = 0;
     
-    char* word = strtok(buffer, " ");
-    char lineBuffer[256] = "";
+    char lineBuffer[1024] = "";
     
-    while (word != NULL) {
-        char testLine[256];
-        strcpy(testLine, lineBuffer);
-        if (strlen(lineBuffer) > 0) strcat(testLine, " ");
-        strcat(testLine, word);
-        
-        int width = MeasureText(testLine, fontSize);
-        
-        if (width > rec.width) {
-            // Draw current line and move down
-            DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
+    while (*ptr != '\0') {
+        if (*ptr == '\n') {
+            // Force line break
+            // Draw current line
+            if (strlen(lineBuffer) > 0) {
+                 DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
+            }
             currentLineY += lineHeight;
-            
-            // Start new line with current word
-            strcpy(lineBuffer, word);
-        } else {
-            // Check if word contains newline (from file reading if not cleaned)
-            // But strtok splits by space. If definitions have \n, usage should handle it.
-            // For now assuming definitions are single line strings from dictionary.c logic.
-            strcpy(lineBuffer, testLine);
+            strcpy(lineBuffer, ""); // Reset line
+            ptr++; // Skip \n
+            continue;
         }
         
-        word = strtok(NULL, " ");
+        // Read word
+        wordLen = 0;
+        // const char* startWord = ptr; // Unused
+        while (*ptr != ' ' && *ptr != '\n' && *ptr != '\0') {
+             wordBuffer[wordLen++] = *ptr++;
+        }
+        wordBuffer[wordLen] = '\0';
+        
+        // Check if word fits
+        const char* space = (strlen(lineBuffer) > 0) ? " " : "";
+        int currentW = MeasureText(lineBuffer, fontSize);
+        int wordW = MeasureText(wordBuffer, fontSize);
+        int spaceW = MeasureText(" ", fontSize);
+        
+        int totalW = currentW + (strlen(space) > 0 ? spaceW : 0) + wordW;
+        
+        if (totalW > rec.width) {
+            // Draw current line and clear
+            DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
+            currentLineY += lineHeight;
+            strcpy(lineBuffer, wordBuffer);
+        } else {
+            if (strlen(lineBuffer) > 0) strcat(lineBuffer, " ");
+            strcat(lineBuffer, wordBuffer);
+        }
+        
+        if (*ptr == ' ') ptr++; // Skip space
     }
+    
     // Draw last line
-    DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
+    if (strlen(lineBuffer) > 0) {
+        DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
+    }
 }

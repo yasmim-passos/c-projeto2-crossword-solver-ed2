@@ -58,10 +58,8 @@ void DrawCrosswordGrid(Grid* grid, int offsetX, int offsetY, int cellSize) {
             // Draw Cell Background
             DrawRectangleRec(rect, bgColor);
             
-            // Draw Borders (Blue Lines) - Only for non-blocked cells
-            if (grid->celulas[y][x].tipo != CELULA_BLOQUEADA) {
-                DrawRectangleLinesEx(rect, 1.0f, UI_COLOR_GRID_LINE);
-            }
+            // Draw Borders (Blue Lines)
+            DrawRectangleLinesEx(rect, 1.0f, UI_COLOR_GRID_LINE);
 
             // Draw Number if exists
             if (grid->celulas[y][x].numero > 0) {
@@ -144,7 +142,7 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
         Vector2 mouse = GetMousePosition();
         int offsetX = 50; 
         int offsetY = 100; // Match main.c DrawCrosswordGrid call
-        int cellSize = 40; // Match main.c DrawCrosswordGrid call
+        int cellSize = 32; // FIXED: Match main.c (was 40)
 
         int gx = (int)(mouse.x - offsetX) / cellSize;
         int gy = (int)(mouse.y - offsetY) / cellSize;
@@ -153,11 +151,12 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
         int cols = (grid->colunas > 0) ? grid->colunas : TAMANHO_MAX_GRID;
 
         if (gx >= 0 && gx < cols && gy >= 0 && gy < rows) {
-             // Only select if not blocked (optional, user preference)
-             // or keep logic simple
-             selectedX = gx;
-             selectedY = gy;
-             cellScales[gy][gx] = 1.2f;   
+             // Only select if not blocked
+             if (grid->celulas[gy][gx].tipo != CELULA_BLOQUEADA) {
+                 selectedX = gx;
+                 selectedY = gy;
+                 cellScales[gy][gx] = 1.2f;   
+             }
         } else {
              selectedX = -1;
              selectedY = -1;
@@ -168,8 +167,9 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
     if (selectedX != -1 && selectedY != -1) {
         // Skip check for MODO_USUARIO if passing simple State
         // if (estado->modo == MODO_USUARIO && ... eFixa)
-        if (grid->celulas[selectedY][selectedX].eFixa) {
-             // Do nothing if fixed
+        if (grid->celulas[selectedY][selectedX].eFixa || grid->celulas[selectedY][selectedX].tipo == CELULA_BLOQUEADA) {
+             // Do nothing if fixed or blocked
+             // (Blocked check is extra safety in case selection bug)
         } else {
             int key = GetKeyPressed();
             if ((key >= 65 && key <= 90) || (key >= 97 && key <= 122)) { // A-Z

@@ -42,7 +42,12 @@ void DesenharMenuPrincipal() {
 void DesenharTelaAjuda() {
     DrawTextCentered("COMO JOGAR", GetScreenWidth()/2, 50, 40, BLACK);
     
-    GuiPanel((Rectangle){50, 100, 700, 350});
+    int panelW = 800;
+    int panelH = 350;
+    int panelX = (GetScreenWidth() - panelW) / 2;
+    int panelY = 100;
+    
+    GuiPanel((Rectangle){panelX, panelY, panelW, panelH});
     
     const char* textoAjuda = 
         "- Use as SETAS ou MOUSE para selecionar os quadrados.\n\n"
@@ -51,7 +56,7 @@ void DesenharTelaAjuda() {
         "- Responda em INGLÊS conforme o dicionário selecionado.\n\n"
         "- Divirta-se!";
         
-    DrawTextWrapped(textoAjuda, (Rectangle){70, 120, 660, 310}, 24, BLACK);
+    DrawTextWrapped(textoAjuda, (Rectangle){panelX + 30, panelY + 30, panelW - 60, panelH - 60}, 24, BLACK);
     
     if (GuiButton((Rectangle){GetScreenWidth()/2 - 100, 500, 200, 50}, "VOLTAR")) {
         cenaAtual = CENA_MENU;

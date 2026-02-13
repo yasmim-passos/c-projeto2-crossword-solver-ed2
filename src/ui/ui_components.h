@@ -14,7 +14,7 @@
 #define UI_COLOR_BUTTON       (Color){ 70, 160, 240, 255 }   // Lighter Sky Blue
 #define UI_COLOR_BUTTON_HOVER (Color){ 100, 180, 250, 255 }  // Even Lighter Blue
 #define UI_COLOR_GRID_LINE    (Color){ 40, 100, 180, 255 }   // Mid Blue Lines
-#define UI_COLOR_BLOCK        (Color){ 0, 0, 0, 255 }        // Black Blocks
+#define UI_COLOR_BLOCK        (Color){ 70, 160, 240, 255 }   // Lighter Sky Blue Blocks
 #define UI_COLOR_CORRECT      (Color){ 46, 204, 113, 255 }   // Green (Correct)
 
 // Draw a styled button with rounded corners and hover effect
