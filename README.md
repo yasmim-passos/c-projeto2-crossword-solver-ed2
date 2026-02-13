@@ -8,10 +8,6 @@ Um solucionador de palavras cruzadas em **C puro** utilizando **Backtracking** c
 
 ## 🎮 Modos do Sistema
 
-### 🤖 Modo Solver
-
-O algoritmo resolve automaticamente mostrando cada tentativa, erro e retrocesso em tempo real.
-
 ### 🧠 Modo Usuário
 
 O jogador resolve manualmente com ajuda de dicas baseadas nos significados das palavras.
