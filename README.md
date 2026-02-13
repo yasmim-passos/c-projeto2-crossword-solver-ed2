@@ -31,11 +31,45 @@ Aplicar na prática conceitos de:
 ## 📂 Estrutura (planejada)
 
 ```
-src/                código fonte
-data/               dicionários e puzzles
-docs/               documentação
-tests/              testes
-Makefile            compilação
+├── src/
+│   ├── app/
+│   │   ├── main.c
+│   │   ├── app.c
+│   │   └── app.h
+│   │
+│   ├── ui/
+│   │   ├── interface.c
+│   │   ├── interface.h
+│   │   ├── ui_components.c
+│   │   └── ui_components.h
+│   │
+│   ├── game/
+│   │   ├── solver.c
+│   │   ├── solver.h
+│   │   ├── validation.c
+│   │   ├── validation.h
+│   │   ├── game_mode.c
+│   │   └── game_mode.h
+│   │
+│   ├── data/
+│   │   ├── grid.c
+│   │   ├── grid.h
+│   │   ├── dictionary.c
+│   │   ├── dictionary.h
+│   │   ├── structs.h
+│   │
+│   ├── external/
+│   │   ├── api_client.c
+│   │   ├── api_client.h
+│   │   ├── io.c
+│   │   └── io.h
+│
+├── data_files/
+│   ├── dictionaries/
+│
+├── docs/
+└── Makefile
+
 ```
 
 ---
