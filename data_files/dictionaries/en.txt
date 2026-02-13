@@ -1,5 +1,29 @@
-HELLO:A common greeting.
+HELLO:A common greeting used when meeting or addressing someone.
 WORLD:The earth, together with all of its countries, peoples, and natural features.
 BRAIN:An organ of soft nervous tissue contained in the skull of vertebrates.
 COMPUTER:An electronic device for storing and processing data.
 RAYLIB:A simple and easy-to-use library to enjoy videogames programming.
+TIME:The indefinite continued progress of existence and events in the past, present, and future regarded as a whole.
+PERSON:A human being regarded as an individual.
+YEAR:The time taken by the earth to make one revolution around the sun.
+WAY:A method, style, or manner of doing something.
+DAY:A period of twenty-four hours as a unit of time, reckoned from one midnight to the next.
+THING:An inanimate material object as distinct from a living sentient being.
+MAN:An adult male human being.
+LIFE:The condition that distinguishes animals and plants from inorganic matter.
+HAND:The end part of a person's arm beyond the wrist, including the palm, fingers, and thumb.
+PART:An amount or section which, when combined with others, makes up the whole of something.
+CHILD:A young human being below the age of puberty or below the legal age of majority.
+EYE:Each of a pair of globular organs in the head through which people and vertebrate animals see.
+WOMAN:An adult female human being.
+PLACE:A particular position or point in space.
+WORK:Activity involving mental or physical effort done in order to achieve a purpose or result.
+WEEK:A period of seven days.
+CASE:An instance of a particular situation; an example of something occurring.
+POINT:A dot or other small mark used in writing or printing.
+GOVERNMENT:The governing body of a nation, state, or community.
+COMPANY:A commercial business.
+NUMBER:An arithmetical value, expressed by a word, symbol, or figure.
+PROJECT:An individual or collaborative enterprise that is carefully planned and designed to achieve a particular aim.
+SCHOOL:An institution for educating children.
+HOUSE:A building for human habitation, especially one that is lived in by a family or small group of people.

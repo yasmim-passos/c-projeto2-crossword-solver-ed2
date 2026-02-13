@@ -1,5 +1,31 @@
-OI:Uma saudação comum.
+OI:Uma saudacao comum usada ao encontrar ou dirigir-se a alguem.
 MUNDO:O planeta Terra e tudo o que nele existe.
-CEREBRO:O órgão principal do sistema nervoso.
-COMPUTADOR:Uma máquina capaz de variados tipos de tratamento automático de informações ou processamento de dados.
+CEREBRO:O orgao principal do sistema nervoso contido no cranio dos vertebrados.
+COMPUTADOR:Uma maquina capaz de variados tipos de tratamento automatico de informacoes ou processamento de dados.
+RAIO:Um feixe estreito de luz ou outra forma de energia radiante.
+TEMPO:A duracao relativa das coisas que cria no ser humano a ideia de presente, passado e futuro.
+PESSOA:Um ser humano considerado como um individuo.
+ANO:O tempo que a Terra leva para dar uma volta completa em torno do Sol.
+DIA:Um periodo de vinte e quatro horas contando de uma meia-noite a outra.
+COISA:Um objeto material inanimado.
+HOMEM:Um ser humano adulto do sexo masculino.
+VIDA:A condicao que distingue animais e plantas da materia inorganica.
+MAO:A parte final do braco humano, incluindo a palma, dedos e polegar.
+PARTE:Uma porcao ou secao de um todo.
+CRIANCA:Um ser humano jovem ou abaixo da idade da puberdade.
+OLHO:Orgao da visao.
+MULHER:Um ser humano adulto do sexo feminino.
+LUGAR:Uma posicao ou ponto particular no espaco.
+TRABALHO:Atividade que envolve esforco mental ou fisico para atingir um objetivo.
+SEMANA:Um periodo de sete dias.
+CASO:Uma ocorrencia ou situacao especifica.
+PONTO:Uma marca pequena e redonda.
+GOVERNO:O corpo governante de uma nacao ou estado.
+EMPRESA:Uma organizacao comercial.
+NUMERO:Um valor aritmetico.
+PROJETO:Um empreendimento colaborativo e planejado.
+ESCOLA:Instituicao de ensino.
+CASA:Local de moradia.
 JOGO:Atividade recreativa com regras.
+PALAVRA:Unidade de linguagem que consiste em um ou mais sons falados ou sua representacao escrita.
+CRUZADA:Que tem forma de cruz.
