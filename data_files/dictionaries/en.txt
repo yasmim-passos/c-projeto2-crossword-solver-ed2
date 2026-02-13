@@ -1,29 +1,100 @@
-HELLO:A common greeting used when meeting or addressing someone.
-WORLD:The earth, together with all of its countries, peoples, and natural features.
-BRAIN:An organ of soft nervous tissue contained in the skull of vertebrates.
-COMPUTER:An electronic device for storing and processing data.
-RAYLIB:A simple and easy-to-use library to enjoy videogames programming.
-TIME:The indefinite continued progress of existence and events in the past, present, and future regarded as a whole.
+HELLO:A common greeting used when meeting someone.
+WORLD:The earth together with all its countries and peoples.
+TIME:The indefinite continued progress of existence.
 PERSON:A human being regarded as an individual.
 YEAR:The time taken by the earth to make one revolution around the sun.
 WAY:A method, style, or manner of doing something.
-DAY:A period of twenty-four hours as a unit of time, reckoned from one midnight to the next.
-THING:An inanimate material object as distinct from a living sentient being.
+DAY:A period of twenty-four hours.
+THING:An inanimate material object.
 MAN:An adult male human being.
 LIFE:The condition that distinguishes animals and plants from inorganic matter.
-HAND:The end part of a person's arm beyond the wrist, including the palm, fingers, and thumb.
-PART:An amount or section which, when combined with others, makes up the whole of something.
-CHILD:A young human being below the age of puberty or below the legal age of majority.
-EYE:Each of a pair of globular organs in the head through which people and vertebrate animals see.
-WOMAN:An adult female human being.
-PLACE:A particular position or point in space.
-WORK:Activity involving mental or physical effort done in order to achieve a purpose or result.
-WEEK:A period of seven days.
-CASE:An instance of a particular situation; an example of something occurring.
-POINT:A dot or other small mark used in writing or printing.
-GOVERNMENT:The governing body of a nation, state, or community.
-COMPANY:A commercial business.
-NUMBER:An arithmetical value, expressed by a word, symbol, or figure.
-PROJECT:An individual or collaborative enterprise that is carefully planned and designed to achieve a particular aim.
+WATER:A colorless, transparent, odorless liquid.
+FIRE:Combustion or burning, in which substances combine chemically with oxygen.
+WIND:The perceptible natural movement of the air.
+EARTH:The planet on which we live; the world.
+TREE:A woody perennial plant, typically having a single stem or trunk.
+FLOWER:The seed-bearing part of a plant.
+SUN:The star around which the earth orbits.
+MOON:The natural satellite of the earth.
+STAR:A fixed luminous point in the night sky.
+SKY:The region of the atmosphere and outer space seen from the earth.
+DOG:A domesticated carnivorous mammal.
+CAT:A small domesticated carnivorous mammal.
+BIRD:A warm-blooded egg-laying vertebrate distinguished by the possession of feathers.
+FISH:A limbless cold-blooded vertebrate animal with gills and fins.
+HORSE:A large plant-eating domesticated mammal with solid hoofs.
+LION:A large cat that lives in prides.
+BEAR:A large, heavy, mammal that walks on the soles of its feet.
+WOLF:A wild carnivorous mammal of the dog family.
+SNAKE:A long limbless reptile that has no eyelids.
+MOUSE:A small rodent that typically has a pointed snout.
+HAND:The end part of a person's arm beyond the wrist.
+EYE:Each of a pair of globular organs in the head through which people see.
+HEAD:The upper part of the human body.
+HEART:A hollow muscular organ that pumps the blood through the circulatory system.
+LEG:Each of the limbs on which a person or animal walks and stands.
+FOOT:The lower extremity of the leg below the ankle.
+MOUTH:The opening in the lower part of the human face.
+EAR:The organ of hearing and balance.
+NOSE:The part projecting above the mouth on the face of a person.
+HAIR:Any of the fine threadlike strands growing from the skin.
+HOUSE:A building for human habitation.
+DOOR:A hinged, sliding, or revolving barrier at the entrance to a building.
+WINDOW:An opening in the wall or roof of a building.
+TABLE:A piece of furniture with a flat top and one or more legs.
+CHAIR:A separate seat for one person.
+BED:A piece of furniture for sleep or rest.
+ROOM:A part or division of a building enclosed by walls.
+KITCHEN:A room or area where food is prepared and cooked.
+ROOF:The structure forming the upper covering of a building.
+FLOOR:The lower surface of a room.
 SCHOOL:An institution for educating children.
-HOUSE:A building for human habitation, especially one that is lived in by a family or small group of people.
+WORK:Activity involving mental or physical effort.
+MONEY:A current medium of exchange in the form of coins and banknotes.
+BOOK:A written or printed work consisting of pages glued or sewn together.
+CAR:A road vehicle, typically with four wheels.
+ROAD:A wide way leading from one place to another.
+CITY:A large town.
+SHOP:A building or part of a building where goods or services are sold.
+PARK:A large public green area in a town.
+STREET:A public road in a city or town.
+RUN:Move at a speed faster than a walk.
+WALK:Move at a regular pace by lifting and setting down each foot in turn.
+EAT:Put food into the mouth and chew and swallow it.
+SLEEP:A condition of body and mind such as that which typically recurs for several hours every night.
+READ:Look at and comprehend the meaning of written or printed matter.
+WRITE:Mark letters, words, or other symbols on a surface.
+SPEAK:Say something in order to convey information.
+LISTEN:Give one's attention to a sound.
+SEE:Perceive with the eyes.
+THINK:Have a particular opinion, belief, or idea.
+RED:The color of blood or fire.
+BLUE:The color of the sky.
+GREEN:The color of grass.
+WHITE:The color of snow or milk.
+BLACK:The darkest color, owing to the absence of or complete absorption of light.
+BIG:Of considerable size, extent, or intensity.
+SMALL:Of a size that is less than normal or usual.
+GOOD:To be desired or approved of.
+BAD:Of poor quality or a low standard.
+HAPPY:Feeling or showing pleasure or contentment.
+COMPUTER:An electronic device for storing and processing data.
+PHONE:A telephone.
+INTERNET:A global computer network providing a variety of information.
+ROBOT:A machine capable of carrying out a complex series of actions automatically.
+POWER:The ability to do something or act in a particular way.
+LIGHT:The natural agent that stimulates sight and makes things visible.
+SOUND:Vibrations that travel through the air or another medium.
+CODE:A system of words, letters, figures, or other symbols used to represent others.
+DATA:Facts and statistics collected together for reference or analysis.
+SPACE:A continuous area or expanse.
+LOVE:An intense feeling of deep affection.
+HOPE:A feeling of expectation and desire for a certain thing to happen.
+FEAR:An unpleasant emotion caused by the belief that someone or something is dangerous.
+IDEA:A thought or suggestion as to a possible course of action.
+NAME:A word or set of words by which a person, animal, place, or thing is known.
+STORY:An account of imaginary or real people and events.
+GAME:A form of play or sport.
+ART:The expression or application of human creative skill and imagination.
+MUSIC:Vocal or instrumental sounds combined in such a way as to produce beauty of form.
+PEACE:Freedom from disturbance; tranquility.

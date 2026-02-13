@@ -1,31 +1,100 @@
-OI:Uma saudacao comum usada ao encontrar ou dirigir-se a alguem.
-MUNDO:O planeta Terra e tudo o que nele existe.
-CEREBRO:O orgao principal do sistema nervoso contido no cranio dos vertebrados.
-COMPUTADOR:Uma maquina capaz de variados tipos de tratamento automatico de informacoes ou processamento de dados.
-RAIO:Um feixe estreito de luz ou outra forma de energia radiante.
-TEMPO:A duracao relativa das coisas que cria no ser humano a ideia de presente, passado e futuro.
+OI:Uma saudacao comum usada ao encontrar alguem.
+MUNDO:O planeta Terra junto com todos os seus paises e povos.
+TEMPO:O progresso continuo e indefinido da existencia.
 PESSOA:Um ser humano considerado como um individuo.
-ANO:O tempo que a Terra leva para dar uma volta completa em torno do Sol.
-DIA:Um periodo de vinte e quatro horas contando de uma meia-noite a outra.
+ANO:O tempo que a Terra leva para dar uma volta ao redor do sol.
+MODO:Um metodo, estilo ou maneira de fazer algo.
+DIA:Um periodo de vinte e quatro horas.
 COISA:Um objeto material inanimado.
 HOMEM:Um ser humano adulto do sexo masculino.
 VIDA:A condicao que distingue animais e plantas da materia inorganica.
-MAO:A parte final do braco humano, incluindo a palma, dedos e polegar.
-PARTE:Uma porcao ou secao de um todo.
-CRIANCA:Um ser humano jovem ou abaixo da idade da puberdade.
-OLHO:Orgao da visao.
-MULHER:Um ser humano adulto do sexo feminino.
-LUGAR:Uma posicao ou ponto particular no espaco.
-TRABALHO:Atividade que envolve esforco mental ou fisico para atingir um objetivo.
-SEMANA:Um periodo de sete dias.
-CASO:Uma ocorrencia ou situacao especifica.
-PONTO:Uma marca pequena e redonda.
-GOVERNO:O corpo governante de uma nacao ou estado.
-EMPRESA:Uma organizacao comercial.
-NUMERO:Um valor aritmetico.
-PROJETO:Um empreendimento colaborativo e planejado.
-ESCOLA:Instituicao de ensino.
-CASA:Local de moradia.
-JOGO:Atividade recreativa com regras.
-PALAVRA:Unidade de linguagem que consiste em um ou mais sons falados ou sua representacao escrita.
-CRUZADA:Que tem forma de cruz.
+AGUA:Liquido incolor, transparente e inodoro essencial para a vida.
+FOGO:Combustao que produz luz e calor.
+VENTO:O movimento natural perceptivel do ar.
+TERRA:O planeta em que vivemos.
+ARVORE:Uma planta perene lenhosa, tipicamente com um unico tronco.
+FLOR:A parte da planta que produz sementes e geralmente e colorida.
+SOL:A estrela ao redor da qual a terra orbita.
+LUA:O satelite natural da terra.
+ESTRELA:Um ponto luminoso fixo no ceu noturno.
+CEU:A regiao da atmosfera e do espaco sideral vista da terra.
+CACHORRO:Um mamifero carnivoro domesticado.
+GATO:Um pequeno mamifero carnivoro domesticado.
+PASSARO:Um vertebrado de sangue quente que poe ovos e tem penas.
+PEIXE:Um animal vertebrado de sangue frio sem membros com guelras e barbatanas.
+CAVALO:Um grande mamifero domesticado herbivoro com cascos solidos.
+LEAO:Um grande felino que vive em bandos.
+URSO:Um mamifero grande e pesado que anda sobre as plantas dos pes.
+LOBO:Um mamifero carnivoro selvagem da familia dos caes.
+COBRA:Um reptil longo sem membros e sem palpebras.
+RATO:Um pequeno roedor que tipicamente tem um focinho pontudo.
+MAO:A parte final do braco de uma pessoa alem do pulso.
+OLHO:Orgao da visao na cabeca.
+CABECA:A parte superior do corpo humano.
+CORACAO:Um orgao muscular oco que bombeia o sangue pelo sistema circulatorio.
+PERNA:Cada um dos membros sobre os quais uma pessoa ou animal anda.
+PE:A extremidade inferior da perna abaixo do tornozelo.
+BOCA:A abertura na parte inferior do rosto humano.
+OUVIDO:O orgao da audicao e equilibrio.
+NARIZ:A parte saliente acima da boca no rosto de uma pessoa.
+CABELO:Qualquer um dos fios finos que crescem na pele.
+CASA:Um edificio para habitacao humana.
+PORTA:Uma barreira movel na entrada de um edificio.
+JANELA:Uma abertura na parede ou telhado de um edificio.
+MESA:Um movel com um tampo plano e uma ou mais pernas.
+CADEIRA:Um assento separado para uma pessoa.
+CAMA:Um movel para dormir ou descansar.
+QUARTO:Uma parte ou divisao de um edificio cercada por paredes.
+COZINHA:Uma sala ou area onde a comida e preparada e cozida.
+TELHADO:A estrutura que forma a cobertura superior de um edificio.
+CHAO:A superficie inferior de uma sala.
+ESCOLA:Uma instituicao para educar criancas.
+TRABALHO:Atividade envolvendo esforco mental ou fisico.
+DINHEIRO:Um meio atual de troca na forma de moedas e notas.
+LIVRO:Uma obra escrita ou impressa consistindo de paginas coladas ou costuradas.
+CARRO:Um veiculo rodoviario, tipicamente com quatro rodas.
+ESTRADA:Uma via larga que leva de um lugar a outro.
+CIDADE:Uma grande povoacao urbana.
+LOJA:Um edificio ou parte de um edificio onde bens ou servicos sao vendidos.
+PARQUE:Uma grande area verde publica em uma cidade.
+RUA:Uma via publica em uma cidade ou vila.
+CORRER:Mover-se a uma velocidade mais rapida do que uma caminhada.
+ANDAR:Mover-se a um ritmo regular levantando e colocando cada pe por vez.
+COMER:Colocar comida na boca, mastigar e engolir.
+DORMIR:Um estado de corpo e mente que ocorre por varias horas todas as noites.
+LER:Olhar e compreender o significado de material escrito ou impresso.
+ESCREVER:Marcar letras, palavras ou outros simbolos em uma superficie.
+FALAR:Dizer algo para transmitir informacao.
+OUVIR:Dar atencao a um som.
+VER:Perceber com os olhos.
+PENSAR:Ter uma opiniao, crenca ou ideia particular.
+VERMELHO:A cor do sangue ou do fogo.
+AZUL:A cor do ceu.
+VERDE:A cor da grama.
+BRANCO:A cor da neve ou do leite.
+PRETO:A cor mais escura, devido a ausencia de luz.
+GRANDE:De tamanho, extensao ou intensidade consideravel.
+PEQUENO:De um tamanho menor que o normal ou usual.
+BOM:Desejado ou aprovado.
+RUIM:De má qualidade ou baixo padrao.
+FELIZ:Sentindo ou mostrando prazer ou contentamento.
+COMPUTADOR:Um dispositivo eletronico para armazenar e processar dados.
+TELEFONE:Um aparelho para comunicacao de voz a distancia.
+INTERNET:Uma rede global de computadores fornecendo uma variedade de informacoes.
+ROBO:Uma maquina capaz de realizar uma serie complexa de acoes automaticamente.
+PODER:A capacidade de fazer algo ou agir de uma maneira particular.
+LUZ:O agente natural que estimula a visao e torna as coisas visiveis.
+SOM:Vibracoes que viajam pelo ar ou outro meio.
+CODIGO:Um sistema de palavras, letras, figuras ou outros simbolos.
+DADOS:Fatos e estatisticas coletados para referencia ou analise.
+ESPACO:Uma area ou extensao continua.
+AMOR:Um sentimento intenso de afeicao profunda.
+ESPERANCA:Um sentimento de expectativa e desejo de que algo aconteca.
+MEDO:Uma emocao desagradavel causada pela crenca de que algo e perigoso.
+IDEIA:Um pensamento ou sugestao sobre um possivel curso de acao.
+NOME:Uma palavra ou conjunto de palavras pelas quais uma pessoa ou coisa e conhecida.
+HISTORIA:Um relato de pessoas e eventos imaginarios ou reais.
+JOGO:Uma forma de brincadeira ou esporte.
+ARTE:A expressao ou aplicacao da habilidade criativa e imaginacao humana.
+MUSICA:Sons vocais ou instrumentais combinados para produzir beleza de forma.
+PAZ:Liberdade de disturbios; tranquilidade.
