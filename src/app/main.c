@@ -224,9 +224,8 @@ void LoadLevel(int level, Grid* g) {
             g->palavras[12].inicio = (Posicao){9, 10}; g->palavras[12].direcao = DIRECAO_VERTICAL; g->palavras[12].tamanho = 4;
             colocarPalavra(g, &g->palavras[12], "POVO"); strcpy(g->palavras[12].dica, "Conjunto de pessoas."); g->numPalavras++;
 
-            // 14. CLUBE (V) at 12,9 (Connects to BANCO C at 12,9)
-            // BANCO starts 12,6. B,A,N,C(12,9),O. 
-            g->palavras[13].inicio = (Posicao){12, 9}; g->palavras[13].direcao = DIRECAO_VERTICAL; g->palavras[13].tamanho = 5;
+            // 14. CLUBE (H) at 0,8 (Safe Position)
+            g->palavras[13].inicio = (Posicao){0, 8}; g->palavras[13].direcao = DIRECAO_HORIZONTAL; g->palavras[13].tamanho = 5;
             colocarPalavra(g, &g->palavras[13], "CLUBE"); strcpy(g->palavras[13].dica, "Associacao recreativa."); g->numPalavras++;
 
             // 15. AREA (H) at 0,0 - Isolated corner
