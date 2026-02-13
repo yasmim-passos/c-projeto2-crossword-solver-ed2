@@ -22,9 +22,9 @@ Aplicar na prática conceitos de:
 ## 🛠️ Tecnologias
 
 * Linguagem: **C**
-* Gráficos: **Raylib**
+* Interface Gráfica: **Raylib**
 * Algoritmo principal: **Backtracking**
-* Plataforma: Windows 
+* Plataforma: **Windows** 
 
 ---
 
