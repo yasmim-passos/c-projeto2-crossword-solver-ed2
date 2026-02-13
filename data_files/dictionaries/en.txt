@@ -1,0 +1,5 @@
+HELLO:A common greeting.
+WORLD:The earth, together with all of its countries, peoples, and natural features.
+BRAIN:An organ of soft nervous tissue contained in the skull of vertebrates.
+COMPUTER:An electronic device for storing and processing data.
+RAYLIB:A simple and easy-to-use library to enjoy videogames programming.

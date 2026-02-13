@@ -1,0 +1,5 @@
+OI:Uma saudação comum.
+MUNDO:O planeta Terra e tudo o que nele existe.
+CEREBRO:O órgão principal do sistema nervoso.
+COMPUTADOR:Uma máquina capaz de variados tipos de tratamento automático de informações ou processamento de dados.
+JOGO:Atividade recreativa com regras.
