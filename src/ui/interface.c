@@ -19,7 +19,7 @@ void InitInterface(void) {
     }
 }
 
-void DrawGrid(Grid* grid, int offsetX, int offsetY, int cellSize) {
+void DrawCrosswordGrid(Grid* grid, int offsetX, int offsetY, int cellSize) {
     int rows = (grid->linhas > 0) ? grid->linhas : TAMANHO_MAX_GRID;
     int cols = (grid->colunas > 0) ? grid->colunas : TAMANHO_MAX_GRID;
 

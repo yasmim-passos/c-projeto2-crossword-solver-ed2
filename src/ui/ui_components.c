@@ -1,4 +1,6 @@
 #include "ui_components.h"
+#include <string.h>
+#include <stdio.h>
 
 bool GuiButton(Rectangle rect, const char* text) {
     Vector2 mousePoint = GetMousePosition();
@@ -50,4 +52,48 @@ void GuiPanel(Rectangle rect) {
 void DrawTextCentered(const char* text, int cx, int cy, int fontSize, Color color) {
     int textWidth = MeasureText(text, fontSize);
     DrawText(text, cx - textWidth / 2, cy - fontSize / 2, fontSize, color);
+}
+
+void DrawTextWrapped(const char *text, Rectangle rec, int fontSize, Color color) {
+    // Basic word wrapping implementation
+    if (!text || strlen(text) == 0) return;
+
+    int textLen = strlen(text);
+    int currentLineY = (int)rec.y;
+    int currentLineX = (int)rec.x;
+    int lineHeight = fontSize + 2;
+    
+    char buffer[1024]; // Safe buffer for typical definition length
+    strncpy(buffer, text, 1023);
+    buffer[1023] = '\0';
+    
+    char* word = strtok(buffer, " ");
+    char lineBuffer[256] = "";
+    
+    while (word != NULL) {
+        char testLine[256];
+        strcpy(testLine, lineBuffer);
+        if (strlen(lineBuffer) > 0) strcat(testLine, " ");
+        strcat(testLine, word);
+        
+        int width = MeasureText(testLine, fontSize);
+        
+        if (width > rec.width) {
+            // Draw current line and move down
+            DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
+            currentLineY += lineHeight;
+            
+            // Start new line with current word
+            strcpy(lineBuffer, word);
+        } else {
+            // Check if word contains newline (from file reading if not cleaned)
+            // But strtok splits by space. If definitions have \n, usage should handle it.
+            // For now assuming definitions are single line strings from dictionary.c logic.
+            strcpy(lineBuffer, testLine);
+        }
+        
+        word = strtok(NULL, " ");
+    }
+    // Draw last line
+    DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
 }

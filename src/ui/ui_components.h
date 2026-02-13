@@ -23,4 +23,7 @@ void GuiPanel(Rectangle rect);
 // Helper to draw centered text
 void DrawTextCentered(const char* text, int cx, int cy, int fontSize, Color color);
 
+// Helper to draw text wrapped within a rectangle
+void DrawTextWrapped(const char *text, Rectangle rec, int fontSize, Color color);
+
 #endif // UI_COMPONENTS_H

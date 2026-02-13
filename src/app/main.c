@@ -5,6 +5,7 @@
 #include "../data/dictionary.h"
 #include "../ui/ui_components.h"
 #include "../data/structs.h"
+#include "../external/api_client.h"
 
 int main() {
     dict_init();
@@ -55,7 +56,7 @@ int main() {
         DrawText("Crossword Puzzle", 40, 40, 30, UI_COLOR_PRIMARY);
         DrawText("Polished Version", 40, 70, 20, GRAY);
         
-        DrawGrid(g, 50, 120, 45);
+        DrawCrosswordGrid(g, 50, 120, 45);
         
         // Side Panel for API
         int sideX = 550;
@@ -72,7 +73,7 @@ int main() {
         
         // Definition Box
         DrawRectangleRounded((Rectangle){ (float)sideX, 260, 280, 200 }, 0.1f, 5, Fade(LIGHTGRAY, 0.3f));
-        DrawTextRec(GetFontDefault(), def, (Rectangle){ (float)sideX + 10, 270, 260, 180 }, 20, 2.0f, true, UI_COLOR_TEXT);
+        DrawTextWrapped(def, (Rectangle){ (float)sideX + 10, 270, 260, 180 }, 20, UI_COLOR_TEXT);
 
         EndDrawing();
     }

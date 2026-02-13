@@ -7,7 +7,7 @@
 void InitInterface(void);
 
 // Main render function for the grid
-void DrawGrid(Grid* grid, int offsetX, int offsetY, int cellSize);
+void DrawCrosswordGrid(Grid* grid, int offsetX, int offsetY, int cellSize);
 
 // Draw solver status overlay
 void DrawSolverStatus(bool is_running, int steps);
