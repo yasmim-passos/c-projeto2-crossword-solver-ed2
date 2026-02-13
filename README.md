@@ -56,7 +56,7 @@ Aplicar na prática conceitos de:
 │   │   ├── grid.h
 │   │   ├── dictionary.c
 │   │   ├── dictionary.h
-│   │   ├── structs.h
+│   │   └── structs.h
 │   │
 │   ├── external/
 │   │   ├── api_client.c
@@ -67,7 +67,7 @@ Aplicar na prática conceitos de:
 ├── data_files/
 │   ├── dictionaries/
 │   │   ├── pt.txt
-│   │   ├── en.txt
+│   │   └── en.txt
 │
 ├── docs/
 └── Makefile
