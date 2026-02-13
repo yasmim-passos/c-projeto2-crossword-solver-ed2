@@ -33,9 +33,7 @@ Aplicar na prática conceitos de:
 ```
 ├── src/
 │   ├── app/
-│   │   ├── main.c
-│   │   ├── app.c
-│   │   └── app.h
+│   │   └── main.c
 │   │
 │   ├── ui/
 │   │   ├── interface.c
