@@ -60,9 +60,7 @@ Aplicar na prática conceitos de:
 │   │
 │   ├── external/
 │   │   ├── api_client.c
-│   │   ├── api_client.h
-│   │   ├── io.c
-│   │   └── io.h
+│   │   └── api_client.h
 │
 ├── data_files/
 │   ├── dictionaries/
