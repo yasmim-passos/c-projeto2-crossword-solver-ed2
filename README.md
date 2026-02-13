@@ -84,4 +84,9 @@ Em desenvolvimento acadêmico.
 
 ## 👥 Equipe
 
-Projeto realizado em grupo para fins educacionais.
+Daiane Santos (daianrsnts)
+Guilhereme Seixas (guilheeme1108-prog)
+Igor Dias (iidias)
+Yasmim Passos (yasmim-passos)
+
+Projeto realizado em grupo como atividade avaliativa da disciplina de Estrutura de Dados II, na Universidade Federal de Sergipe (UFS).
