@@ -66,6 +66,8 @@ Aplicar na prática conceitos de:
 │
 ├── data_files/
 │   ├── dictionaries/
+│   │   ├── pt.txt
+│   │   ├── en.txt
 │
 ├── docs/
 └── Makefile
