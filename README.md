@@ -2,15 +2,7 @@
 
 Projeto desenvolvido para a disciplina **Estrutura de Dados II**.
 
-Um solucionador de palavras cruzadas em **C puro** utilizando **Backtracking** com visualização gráfica em **Raylib**.
-
----
-
-## 🎮 Modos do Sistema
-
-### 🧠 Modo Usuário
-
-O jogador resolve manualmente com ajuda de dicas baseadas nos significados das palavras.
+Um solucionador de palavras cruzadas com ajuda de dicas baseadas nos significados das palavras em **C puro** utilizando **Backtracking** com visualização gráfica em **Raylib**.
 
 ---
 
