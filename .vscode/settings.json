@@ -1,0 +1,24 @@
+{
+    "C_Cpp.errorSquiggles": "enabled",
+    "C_Cpp.intelliSenseEngine": "default",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/src",
+        "${workspaceFolder}/src/**"
+    ],
+    "C_Cpp.default.defines": [
+        "__STDC__=1"
+    ],
+    "C_Cpp.default.compilerPath": "gcc",
+    "C_Cpp.default.cStandard": "c11",
+    "C_Cpp.default.intelliSenseMode": "gcc-x64",
+    "files.associations": {
+        "*.h": "c",
+        "*.c": "c",
+        "structs.h": "c",
+        "grid.h": "c",
+        "validation.h": "c",
+        "solver.h": "c",
+        "game_mode.h": "c"
+    }
+}
