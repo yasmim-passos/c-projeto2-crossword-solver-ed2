@@ -84,9 +84,9 @@ Em desenvolvimento acadêmico.
 
 ## 👥 Equipe
 
-* Daiane Santos (daianesnts)
-* Guilhereme Seixas (guilheeme1108-prog)
-* Igor Dias (iidias)
-* Yasmim Passos (yasmim-passos)
+* Daiane Santos (@daianesnts)
+* Guilhereme Seixas (@guilheeme1108-prog)
+* Igor Dias (@iidias)
+* Yasmim Passos (@yasmim-passos)
 
 Projeto realizado em grupo como atividade avaliativa da disciplina de Estrutura de Dados II, na Universidade Federal de Sergipe (UFS).
