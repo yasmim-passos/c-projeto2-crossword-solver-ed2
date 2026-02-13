@@ -14,7 +14,7 @@ Aplicar na prática conceitos de:
 * Estruturas de dados em grid
 * Validação de restrições
 * Internacionalização (PT/EN)
-* Integração com API de dicionário
+* Integração com API de dicionário (Simulada/Local)
 * Visualização de algoritmos
 
 ---
@@ -28,53 +28,91 @@ Aplicar na prática conceitos de:
 
 ---
 
-## 📂 Estrutura (planejada)
+## 🚀 Como Executar
+
+### Pré-requisitos
+1.  **Raylib Instalado**: Este projeto depende da biblioteca Raylib. Recomenda-se usar o kit `w64devkit` da Raylib.
+    *   Instale em: `C:\raylib\w64devkit` (padrão)
+    *   Ou ajuste os caminhos no `Makefile` / `build.bat`.
+
+### Compilando e Rodando
+
+**Opção A: Usando build.bat (Windows)**
+1.  Abra o terminal na pasta do projeto.
+2.  Execute:
+    ```cmd
+    build.bat
+    ```
+3.  O executável será criado em `bin/main.exe`.
+
+**Opção B: Usando Makefile (MinGW/Make)**
+1.  Abra o terminal.
+2.  Execute:
+    ```bash
+    make
+    ```
+3.  Execute o jogo:
+    ```bash
+    make run
+    ```
+
+---
+
+## 📂 Estrutura do Projeto
 
 ```
 ├── src/
 │   ├── app/
-│   │   └── main.c
+│   │   └── main.c          # Lógica principal e loop do jogo
 │   │
 │   ├── ui/
-│   │   ├── interface.c
+│   │   ├── interface.c     # Renderização do grid e inputs
 │   │   ├── interface.h
-│   │   ├── ui_components.c
+│   │   ├── ui_components.c # Botões e estilos
 │   │   └── ui_components.h
 │   │
 │   ├── game/
-│   │   ├── solver.c
+│   │   ├── solver.c        # Algoritmo de Backtracking
 │   │   ├── solver.h
-│   │   ├── validation.c
+│   │   ├── validation.c    # Regras de validação
 │   │   ├── validation.h
-│   │   ├── game_mode.c
+│   │   ├── game_mode.c     # Modos de jogo
 │   │   └── game_mode.h
 │   │
 │   ├── data/
-│   │   ├── grid.c
+│   │   ├── grid.c          # Manipulação da matriz
 │   │   ├── grid.h
-│   │   ├── dictionary.c
+│   │   ├── dictionary.c    # Banco de palavras
 │   │   ├── dictionary.h
-│   │   └── structs.h
+│   │   └── structs.h       # Definições de tipos
 │   │
 │   ├── external/
-│   │   ├── api_client.c
+│   │   ├── api_client.c    # Cliente API (simulado)
 │   │   └── api_client.h
 │
 ├── data_files/
-│   ├── dictionaries/
+│   ├── dictionaries/       # Arquivos de textos dos dicionários para em casa de falha da API
 │   │   ├── pt.txt
 │   │   └── en.txt
 │
+├── bin/
+│   │   └── main.exe        # Executável final
+|
 ├── docs/
-└── Makefile
-
+|__ Makefile                # Script de compilação
 ```
 
 ---
 
 ## 🚧 Status do Projeto
 
-Em desenvolvimento acadêmico.
+✅ **Concluído**
+- [x] Interface Gráfica (Raylib)
+- [x] Lógica de Jogo (3 Níveis PT / 3 Níveis EN)
+- [x] Backtracking/Solver
+- [x] Sistema de Dicas
+- [x] Internacionalização
+- [x] Navegação por Teclado e Mouse
 
 ---
 
