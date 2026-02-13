@@ -20,13 +20,11 @@ if not exist "bin" mkdir bin
 echo Compiling...
 "%CC%" ^
   src\app\main.c ^
-  src\app\app.c ^
   src\ui\interface.c ^
   src\ui\ui_components.c ^
   src\data\dictionary.c ^
   src\data\grid.c ^
   src\external\api_client.c ^
-  src\external\io.c ^
   src\game\solver.c ^
   src\game\validation.c ^
   src\game\game_mode.c ^

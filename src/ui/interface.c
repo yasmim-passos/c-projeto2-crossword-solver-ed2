@@ -58,8 +58,10 @@ void DrawCrosswordGrid(Grid* grid, int offsetX, int offsetY, int cellSize) {
             // Draw Cell Background
             DrawRectangleRec(rect, bgColor);
             
-            // Draw Borders (Blue Lines)
-            DrawRectangleLinesEx(rect, 1.0f, UI_COLOR_GRID_LINE);
+            // Draw Borders (Blue Lines) - Only for non-blocked cells
+            if (grid->celulas[y][x].tipo != CELULA_BLOQUEADA) {
+                DrawRectangleLinesEx(rect, 1.0f, UI_COLOR_GRID_LINE);
+            }
 
             // Draw Number if exists
             if (grid->celulas[y][x].numero > 0) {
@@ -115,10 +117,27 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
     if (!grid) return;
     
     // Keyboard Navigation
-    if (IsKeyPressed(KEY_RIGHT)) selectedX = (selectedX + 1) % grid->colunas;
-    if (IsKeyPressed(KEY_LEFT)) selectedX = (selectedX - 1 + grid->colunas) % grid->colunas;
-    if (IsKeyPressed(KEY_DOWN)) selectedY = (selectedY + 1) % grid->linhas;
-    if (IsKeyPressed(KEY_UP)) selectedY = (selectedY - 1 + grid->linhas) % grid->linhas;
+    // Keyboard Navigation (Skip Blocks)
+    if (IsKeyPressed(KEY_RIGHT)) {
+        int nx = selectedX;
+        do { nx = (nx + 1) % grid->colunas; } while(grid->celulas[selectedY][nx].tipo == CELULA_BLOQUEADA && nx != selectedX);
+        selectedX = nx;
+    }
+    if (IsKeyPressed(KEY_LEFT)) {
+        int nx = selectedX;
+        do { nx = (nx - 1 + grid->colunas) % grid->colunas; } while(grid->celulas[selectedY][nx].tipo == CELULA_BLOQUEADA && nx != selectedX);
+        selectedX = nx;
+    }
+    if (IsKeyPressed(KEY_DOWN)) {
+        int ny = selectedY;
+        do { ny = (ny + 1) % grid->linhas; } while(grid->celulas[ny][selectedX].tipo == CELULA_BLOQUEADA && ny != selectedY);
+        selectedY = ny;
+    }
+    if (IsKeyPressed(KEY_UP)) {
+        int ny = selectedY;
+        do { ny = (ny - 1 + grid->linhas) % grid->linhas; } while(grid->celulas[ny][selectedX].tipo == CELULA_BLOQUEADA && ny != selectedY);
+        selectedY = ny;
+    }
 
     // Mouse Selection
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
