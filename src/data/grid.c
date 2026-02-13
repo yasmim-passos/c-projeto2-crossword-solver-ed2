@@ -7,12 +7,11 @@ void inicializarGrid(Grid* grid, int linhas, int colunas) {
     grid->linhas = linhas;
     grid->colunas = colunas;
     grid->numPalavras = 0;
-    // Initialize all as BLOCKED (Blue blocks) by default
     for(int i=0; i<TAMANHO_MAX_GRID; i++) {
         for(int j=0; j<TAMANHO_MAX_GRID; j++) {
             grid->celulas[i][j].tipo = CELULA_BLOQUEADA;
             grid->celulas[i][j].letra = '\0';
-            grid->celulas[i][j].eFixa = false; // Player can edit
+            grid->celulas[i][j].eFixa = false; // Jogador pode editar
             grid->celulas[i][j].numero = 0;
         }
     }
@@ -61,17 +60,15 @@ bool colocarPalavra(Grid* grid, Palavra* palavra, const char* texto) {
     int len = strlen(texto);
     if (len != palavra->tamanho) return false;
     
-    // Store answer
     strncpy(palavra->resposta, texto, TAMANHO_MAX_PALAVRA);
     
-    // Init empty state for user
     palavra->textoAtual[0] = '\0';
     palavra->estaCompleta = false;
     
     int r = palavra->inicio.linha;
     int c = palavra->inicio.coluna;
     
-    // Carve out space (set directly to Empty, don't write letter)
+    // Muda para espaço cheio, não pode escrever
     for (int i = 0; i < len; i++) {
         if (ehPosicaoValida(grid, r, c)) {
             grid->celulas[r][c].tipo = CELULA_VAZIA; 
@@ -96,21 +93,18 @@ void removerPalavra(Grid* grid, Palavra* palavra) {
     
     for (int i = 0; i < len; i++) {
         if (ehPosicaoValida(grid, r, c)) {
-            // Check if this cell is used by another COMPLETED word or is FIXED
             if (grid->celulas[r][c].eFixa) {
-                // Don't clear fixed cells
             } else {
                 bool partOfAnother = false;
                 for (int w = 0; w < grid->numPalavras; w++) {
                     Palavra* other = &grid->palavras[w];
-                    if (other == palavra) continue; // Skip self
-                    if (!other->estaCompleta) continue; // Skip incomplete words
+                    if (other == palavra) continue;
+                    if (!other->estaCompleta) continue;
                     
-                    // Check intersection
+                    // Checa interceção
                     int or = other->inicio.linha;
                     int oc = other->inicio.coluna;
                     
-                    // Simple check: does other word cover (r,c)?
                     if (other->direcao == DIRECAO_HORIZONTAL) {
                         if (r == or && c >= oc && c < oc + other->tamanho) {
                             partOfAnother = true;
@@ -135,4 +129,3 @@ void removerPalavra(Grid* grid, Palavra* palavra) {
         else r++;
     }
 }
-
