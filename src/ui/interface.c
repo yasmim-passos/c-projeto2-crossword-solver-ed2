@@ -141,13 +141,11 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
                  cellScales[gy][gx] = 1.2f;   
              }
         }
-        // Removed else block to prevent deselection on button click
     }
 
     // Interacao com o teclado (Digitacao)
     if (selectedX != -1 && selectedY != -1) {
         // Pula checagem para MODO_USUARIO se passando simple stade
-        // if (estado->modo == MODO_USUARIO && ... eFixa)
         if (grid->celulas[selectedY][selectedX].eFixa || grid->celulas[selectedY][selectedX].tipo == CELULA_BLOQUEADA) {
              // Nao faz nada se fixado ou bloqueado
         } else {
@@ -199,14 +197,7 @@ void RevealNextUnsolvedWord(Grid* grid) {
             for (int k = 0; k < p->tamanho; k++) {
                 grid->celulas[r][c].letra = p->resposta[k];
                 grid->celulas[r][c].tipo = CELULA_PREENCHIDA;
-                // Opcional: Marcar como fixa (verde) imediatamente?
-                // O usuario pediu para REVELAR. Geralmente isso implica dar a resposta correta.
-                // Vamos deixar como normal, o usuario pode clicar em VERIFICAR depois se quiser.
-                // Mas cheat geralmente e definitivo. Vamos deixar editavel ou nao?
-                // Se o usuario apagar, ele perde a dica?
-                // Melhor nao marcar eFixa, assim ele pode ver que foi preenchido mas nao validado ainda (verde).
-                // OU, marcar eFixa para mostrar que e a resposta oficial.
-                // Dado "Pular Palavra" -> Skip logic imply done.
+                // Dado "Pular Palavra"
                 // Vamos preencher.
                 if (p->direcao == DIRECAO_HORIZONTAL) c++; else r++;
             }
@@ -214,4 +205,3 @@ void RevealNextUnsolvedWord(Grid* grid) {
         }
     }
 }
-

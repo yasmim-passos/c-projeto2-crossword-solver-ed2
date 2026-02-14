@@ -1,7 +1,7 @@
 #include "puzzle_generator.h"
 #include "solver.h"
 #include "../data/grid.h"
-#include "../data/dictionary.h" // Needed for fetching random words
+#include "../data/dictionary.h" // Necessário para busca de palavras aleatorias
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
@@ -9,10 +9,32 @@
 
 static bool seeded = false;
 
+// Session Word Tracking
+#define MAX_SESSION_WORDS 500
+static char sessionUsedWords[MAX_SESSION_WORDS][TAMANHO_MAX_PALAVRA + 1];
+static int sessionUsedCount = 0;
+
 void Generator_Init(void) {
     if (!seeded) {
         srand(time(NULL));
         seeded = true;
+    }
+}
+
+void Generator_ResetSession(void) {
+    sessionUsedCount = 0;
+}
+
+static bool IsWordUsedInSession(const char* word) {
+    for (int i = 0; i < sessionUsedCount; i++) {
+        if (strcmp(sessionUsedWords[i], word) == 0) return true;
+    }
+    return false;
+}
+
+static void MarkWordUsedInSession(const char* word) {
+    if (sessionUsedCount < MAX_SESSION_WORDS) {
+        strcpy(sessionUsedWords[sessionUsedCount++], word);
     }
 }
 
@@ -51,11 +73,6 @@ static bool IsPlacementValid(Grid* g, int row, int col, int len, Direcao dir, co
         else if (cell->tipo == CELULA_BLOQUEADA || cell->tipo == CELULA_VAZIA) {
              // Se vazia/bloqueada, devemos garantir que nao estamos tocando outras palavras "de lado" 
              // (criando nao-palavras de 2 letras), A MENOS que seja o ponto de cruzamento.
-             // Essa logica complexa. 
-             // Simplificado: regras padrao exigem que qualquer celula adjacente 
-             // perpendicular ao fluxo deve ser vazia/bloqueada, a menos que seja um cruzamento valido.
-             
-             // MAS, como estamos construindo *construtivamente*, podemos simplificar:
              // Apenas permitir colocacao se a celula for VAZIA/BLOQUEADA.
         }
     }
@@ -126,11 +143,10 @@ static bool BacktrackGenerate(Grid* grid, int targetWords) {
         Palavra* srcP = &grid->palavras[i];
         
         // Tenta todas as posicoes desta palavra para cruzar
-        // Shuffle positions too?
         int len = srcP->tamanho;
         int* charIndices = (int*)malloc(len * sizeof(int));
         for(int k=0; k<len; k++) charIndices[k] = k;
-        // Shuffle char indices
+        // Embaralha char indices
         for(int k=len-1; k>0; k--) {
             int j = rand() % (k+1);
             int temp = charIndices[k];
@@ -147,9 +163,9 @@ static bool BacktrackGenerate(Grid* grid, int targetWords) {
             Direcao newDir = (srcP->direcao == DIRECAO_HORIZONTAL) ? DIRECAO_VERTICAL : DIRECAO_HORIZONTAL;
             
             // Tentar tamanhos variados
-            // Shuffle sizes 4-7
+            // Embaralha tamanhos 4-7
             int sizes[] = {4, 5, 6, 7};
-            // shuffle sizes
+            // Embaralha tamanhos
              for(int s=3; s>0; s--) {
                 int j = rand() % (s+1);
                 int temp = sizes[s];
@@ -170,9 +186,8 @@ static bool BacktrackGenerate(Grid* grid, int targetWords) {
                      int tries = (count > 15) ? 15 : count;
                      int* candIndices = (int*)malloc(count * sizeof(int));
                      for(int ci=0; ci<count; ci++) candIndices[ci] = ci;
-                      // Shuffle cand indices partial
                     for(int ci=0; ci<tries; ci++) {
-                        int rnd = rand() % count; // Simple random pick better for speed than full shuffle large list
+                        int rnd = rand() % count; // Simples escolha aleatória é melhor para velocidade do que uma embaralhada completa em uma lista grande
                         int temp = candIndices[ci];
                         candIndices[ci] = candIndices[rnd];
                         candIndices[rnd] = temp;
@@ -188,15 +203,21 @@ static bool BacktrackGenerate(Grid* grid, int targetWords) {
                                   int startR = pivotR - ((newDir == DIRECAO_VERTICAL) ? j : 0);
                                   int startC = pivotC - ((newDir == DIRECAO_HORIZONTAL) ? j : 0);
                                   
-                                  // Check Dup
+                                  // Check Dup in Grid OR Session
                                   bool dup = false;
+                                  
+                                  // Check Grid
                                   for(int w=0; w<grid->numPalavras; w++) {
                                       if (strcmp(grid->palavras[w].resposta, cand) == 0) dup = true;
                                   }
+                                  
+                                  // Check Session (Global)
+                                  if (!dup && IsWordUsedInSession(cand)) dup = true;
+                                  
                                   if (dup) continue;
 
                                   if (IsPlacementValid(grid, startR, startC, newLen, newDir, cand)) {
-                                      // DO: Place Word
+                                      // FAZ: coloca palavra
                                       int currentIdx = grid->numPalavras;
                                       Palavra* newP = &grid->palavras[currentIdx];
                                       newP->direcao = newDir;
@@ -214,16 +235,16 @@ static bool BacktrackGenerate(Grid* grid, int targetWords) {
                                       }
                                       grid->numPalavras++;
 
-                                      // RECURSE
+                                      // RECURSIVO
                                       if (BacktrackGenerate(grid, targetWords)) {
                                           free(candIndices);
                                           if (searchList) { for(int xx=0; xx<count; xx++) free(searchList[xx]); free(searchList); }
                                           free(charIndices);
                                           free(wordIndices);
-                                          return true; // Sucesso propagates up
+                                          return true;
                                       }
                                       
-                                      // UNDO (Backtrack)
+                                      // DESFAZ (Backtrack)
                                       grid->numPalavras--;
                                       // Restaurar celulas... Cuidado!
                                       // Se removermos cells, podemos apagar interseccoes de outras palavras?
@@ -294,7 +315,15 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
     
     if (numCandidates > 0) {
         char* startWord = candidates[rand() % numCandidates];
-        // ... (Mesma logica de inicializacao)
+        
+        // Ensure start word is unique too!
+        // But hard to retry here without loop. If collision, just accept for start or pick another?
+        // Let's try up to 10 times for a unique start word
+        for(int try=0; try<10; try++) {
+            if (!IsWordUsedInSession(startWord)) break;
+            startWord = candidates[rand() % numCandidates];
+        }
+        
         Palavra* p = &grid->palavras[grid->numPalavras];
         p->direcao = DIRECAO_HORIZONTAL;
         p->tamanho = len;
@@ -314,7 +343,6 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
         if (!BacktrackGenerate(grid, targetWords)) {
             // Se falhou, tenta pelo menos retornar o que conseguiu se for "decente"
             if (grid->numPalavras < 3) {
-                 // Retry complete reset? Or just accept?
                  // Vamos aceitar para nao travar.
             }
         }
@@ -326,9 +354,11 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
         free(candidates);
     }
 
-    // 5. Finalizar (Converter para Jogavel)
+    // 5. Finalizar (Converter para Jogavel) e Marcar como Usadas
     // Preencher Dicas e limpar celulas para jogabilidade
     for(int i=0; i<grid->numPalavras; i++) {
+        MarkWordUsedInSession(grid->palavras[i].resposta); // Mark as used
+        
         dict_check_word(grid->palavras[i].resposta, grid->palavras[i].dica, TAMANHO_MAX_DICA);
         if (strlen(grid->palavras[i].dica) == 0) strcpy(grid->palavras[i].dica, "Sem Dica");
          grid->palavras[i].estaCompleta = false;

@@ -10,14 +10,13 @@
 typedef struct {
     char word[TAMANHO_MAX_PALAVRA + 1];
     char definition[MAX_DEF_LEN];
-    char lang[3]; // "PT" or "EN"
+    char lang[3]; // "PT" ou "EN"
 } DictEntry;
 
 static DictEntry dictionary[MAX_DICT_WORDS];
 static int dictWordCount = 0;
-static char currentLang[3] = "PT"; // Default
+static char currentLang[3] = "PT"; // Padrao
 
-// Trim whitespace
 static void trim(char * s) {
     char * p = s;
     int l = strlen(p);
@@ -31,7 +30,7 @@ static void trim(char * s) {
 static void load_file(const char* filepath, const char* lang) {
     FILE* file = fopen(filepath, "r");
     if (!file) {
-        // Try fallback paths (heuristic for different run contexts)
+        // Tenta fallback caminhos
         char path2[128]; snprintf(path2, 128, "../%s", filepath);
         file = fopen(path2, "r");
         if (!file) {
@@ -47,7 +46,7 @@ static void load_file(const char* filepath, const char* lang) {
 
     char line[512];
     while (fgets(line, sizeof(line), file) && dictWordCount < MAX_DICT_WORDS) {
-        // Format: WORD:Definition
+        // Formato: PALAVRA:Definição
         char* sep = strchr(line, ':');
         if (sep) {
             *sep = '\0';
@@ -58,7 +57,6 @@ static void load_file(const char* filepath, const char* lang) {
             trim(def);
 
             if (strlen(word) > 0 && strlen(word) <= TAMANHO_MAX_PALAVRA) {
-                // Store
                 strncpy(dictionary[dictWordCount].word, word, TAMANHO_MAX_PALAVRA);
                 dictionary[dictWordCount].word[TAMANHO_MAX_PALAVRA] = '\0';
                 
@@ -92,24 +90,20 @@ void dict_set_language(const char* lang) {
 bool dict_check_word(const char* word, char* out_def, int max_len) {
     for (int i = 0; i < dictWordCount; i++) {
         if (strcasecmp(dictionary[i].word, word) == 0) {
-            // Found, but check language preference? 
-            // Actually, for checking, we might accept any valid word, 
-            // but ideally we prioritize the definition from the current language.
             if (strcmp(dictionary[i].lang, currentLang) == 0) {
                  if (out_def) {
                     strncpy(out_def, dictionary[i].definition, max_len - 1);
                     out_def[max_len - 1] = '\0';
                  }
-                 return true;
+                 return true; // Retorna true se encontra no indioma correto
             }
         }
     }
-    // Only return true if found in correct language
     return false;
 }
 
 void dict_search_by_size(int size, char*** out_words, int* out_count) {
-    // 1. Count matches
+    // 1. Conta matches
     int matches = 0;
     for (int i = 0; i < dictWordCount; i++) {
         if (strlen(dictionary[i].word) == size && strcmp(dictionary[i].lang, currentLang) == 0) {
@@ -123,10 +117,10 @@ void dict_search_by_size(int size, char*** out_words, int* out_count) {
         return;
     }
 
-    // 2. Allocate
+    // 2. Aloca
     *out_words = malloc(sizeof(char*) * matches);
     
-    // 3. Fill
+    // 3. Completa
     int idx = 0;
     for (int i = 0; i < dictWordCount; i++) {
         if (strlen(dictionary[i].word) == size && strcmp(dictionary[i].lang, currentLang) == 0) {

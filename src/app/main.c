@@ -41,7 +41,7 @@ void DesenharMenuPrincipal() {
         CloseWindow();
     }
     
-    DrawTextCentered("v2.0 - Edicao Jornal", GetScreenWidth()/2, GetScreenHeight() - 30, 20, DARKGRAY);
+    DrawTextCentered("Trabalho EDII - Utilizando Backtracking", GetScreenWidth()/2, GetScreenHeight() - 30, 20, DARKGRAY);
 }
 
 void DesenharTelaAjuda() {
@@ -58,7 +58,7 @@ void DesenharTelaAjuda() {
         "- Use as SETAS ou MOUSE para selecionar os quadrados.\n\n"
         "- Digite as letras para preencher a grade.\n\n"
         "- Leia as dicas na lateral direita (Horizontais e Verticais).\n\n"
-        "- Responda em INGLÊS conforme o dicionário selecionado.\n\n"
+        "- Responda conforme o dicionário selecionado.\n\n"
         "- Divirta-se!";
         
     DrawTextWrapped(textoAjuda, (Rectangle){panelX + 30, panelY + 30, panelW - 60, panelH - 60}, 24, BLACK);
@@ -74,11 +74,11 @@ int gameErrors = 0;
 int currentLevel = 1;
 int maxLevels = 3;
 
-// Global Score Tracking (Infinite Mode)
+// Modo Infinito
 double grandTotalTime = 0;
 int grandTotalErrors = 0;
 
-// Global settings
+// Configuracoes globais
 char globalLanguage[3] = "EN";
 
 // Tela de Relatorio Final
@@ -107,7 +107,7 @@ void DesenharTelaRelatorio() {
     
     if (GuiButton((Rectangle){GetScreenWidth()/2 - 150, 550, 300, 50}, "VOLTAR AO MENU")) {
         cenaAtual = CENA_MENU;
-        // Reset globals
+        // Reseta globais
         currentLevel = 1; 
         grandTotalTime = 0; 
         grandTotalErrors = 0;
@@ -187,59 +187,15 @@ void LoadLevel(int level, Grid* g) {
         printf("Generator falhou para nivel %d. Tentando novamente...\n", level);
         if (!Generator_GenerateLevel(g, level)) {
              printf("Erro fatal no Generator.\n");
-             // Fallback to a single word if everything explodes?
-             // Mas o generator deve ser robusto.
         }
     }
-
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-        
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-            
-    // (End of manual levels removal)
-
-    // (End of manual levels removal)
-
-
-
-
-
     
     gameErrors = 0;
     startTime = GetTime();
     RecalculateNumbers(g); // AUTO-AJUSTA NUMEROS
     FinalizeGrid(g);       // MARCA NAO USADOS
     
-    // Sort words by grid number
+    // Sorteia palavras pelo numero do grid
     for(int i=0; i<g->numPalavras-1; i++) {
         for(int j=0; j<g->numPalavras-i-1; j++) {
             int numA = g->celulas[g->palavras[j].inicio.linha][g->palavras[j].inicio.coluna].numero;
@@ -257,7 +213,7 @@ void LoadLevel(int level, Grid* g) {
 int main() {
     dict_init();
     
-    InitWindow(1024, 768, "Palavras Cruzadas - Expanded");
+    InitWindow(1024, 768, "Palavras Cruzadas - Backtracking");
     SetTargetFPS(60);
     
     InitInterface();
@@ -271,7 +227,7 @@ int main() {
     char statusMsg[64] = "";
     bool gameOver = false;
     
-    // Inic Estado
+    // Inicia Estado
     currentLevel = 1;
     grandTotalTime = 0;
     grandTotalErrors = 0;
