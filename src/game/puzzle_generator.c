@@ -16,15 +16,15 @@ void Generator_Init(void) {
     }
 }
 
-// --- HELPER FUNCTIONS ---
+// --- FUNCOES AUXILIARES ---
 
-// Check if a word placement is valid (bounds and neighbors)
-// Returns true if valid.
+// Verifica se a colocacao de uma palavra valida (limites e vizinhos)
+// Retorna true se valida.
 static bool IsPlacementValid(Grid* g, int row, int col, int len, Direcao dir, const char* word) {
     int r = row;
     int c = col;
     
-    // 1. Basic Bounds
+    // 1. Limites Basicos
     if (r < 0 || c < 0) return false;
     if (dir == DIRECAO_HORIZONTAL) {
         if (c + len > g->colunas) return false;
@@ -32,59 +32,59 @@ static bool IsPlacementValid(Grid* g, int row, int col, int len, Direcao dir, co
         if (r + len > g->linhas) return false;
     }
 
-    // 2. Collision & Neighbor Check
-    // We iterate over the cells of the new word
+    // 2. Colisao e Vizinhos
+    // Iteramos sobre as celulas da nova palavra
     for (int i = 0; i < len; i++) {
-        // Current cell position
+        // Posicao atual da celula
         int curR = (dir == DIRECAO_HORIZONTAL) ? r : r + i;
         int curC = (dir == DIRECAO_HORIZONTAL) ? c + i : c;
         char letter = word[i];
 
-        // Check content of this cell
+        // Verifica conteudo desta celula
         Celula* cell = &g->celulas[curR][curC];
         
-        // If cell is already filled
+        // Se a celula ja esta preenchida
         if (cell->tipo == CELULA_PREENCHIDA) {
-            // Must match exact letter
+            // Deve coincidir a letra exata
             if (cell->letra != letter) return false;
         } 
         else if (cell->tipo == CELULA_BLOQUEADA || cell->tipo == CELULA_VAZIA) {
-             // If empty/blocked, we must ensure we are not touching other words "sideways" 
-             // (creating 2-letter non-words), UNLESS it's the crossing point.
-             // This logic is complex. 
-             // Simplified: standard crossword rules require that any adjacent cell 
-             // perpendicular to flow must be empty/blocked, unless it's a valid crossing.
+             // Se vazia/bloqueada, devemos garantir que nao estamos tocando outras palavras "de lado" 
+             // (criando nao-palavras de 2 letras), A MENOS que seja o ponto de cruzamento.
+             // Essa logica complexa. 
+             // Simplificado: regras padrao exigem que qualquer celula adjacente 
+             // perpendicular ao fluxo deve ser vazia/bloqueada, a menos que seja um cruzamento valido.
              
-             // BUT, since we are building *constructively*, we can simplify:
-             // Only allow placement if the cell is EMPTY/BLOQUEADA.
+             // MAS, como estamos construindo *construtivamente*, podemos simplificar:
+             // Apenas permitir colocacao se a celula for VAZIA/BLOQUEADA.
         }
     }
     
-    // 3. Verify Word Limits (Start/End)
-    // Cell "before" word must be empty/blocked/boundary
+    // 3. Verifica Limites da Palavra (Inicio/Fim)
+    // Celula "antes" da palavra deve ser vazia/bloqueada/limite
     int preR = (dir == DIRECAO_HORIZONTAL) ? r : r - 1;
     int preC = (dir == DIRECAO_HORIZONTAL) ? c - 1 : c;
     if (preR >= 0 && preC >= 0 && preR < g->linhas && preC < g->colunas) {
         if (g->celulas[preR][preC].tipo == CELULA_PREENCHIDA) return false;
     }
     
-    // Cell "after" word must be empty/blocked/boundary
+    // Celula "depois" da palavra deve ser vazia/bloqueada/limite
     int postR = (dir == DIRECAO_HORIZONTAL) ? r : r + len;
     int postC = (dir == DIRECAO_HORIZONTAL) ? c + len : c;
     if (postR < g->linhas && postC < g->colunas) {
         if (g->celulas[postR][postC].tipo == CELULA_PREENCHIDA) return false;
     }
 
-    // 4. "Parallel" check (prevent side-by-side words)
-    // Iterate again, checking strictly perpendicular neighbors
+    // 4. Checagem "Paralela" (evitar palavras lado a lado)
+    // Iterar novamente, verificando estritamente vizinhos perpendiculares
     for (int i = 0; i < len; i++) {
         int curR = (dir == DIRECAO_HORIZONTAL) ? r : r + i;
         int curC = (dir == DIRECAO_HORIZONTAL) ? c + i : c;
         
-        // If this cell was already filled, it's a crossing, so neighbors are OK (they belong to crossing word)
+        // Se esta celula ja estava preenchida, e um cruzamento, entao vizinhos sao OK (pertencem a palavra cruzada)
         if (g->celulas[curR][curC].tipo == CELULA_PREENCHIDA) continue; 
 
-        // Check Perpendicular Neighbors
+        // Verifica Vizinhos Perpendiculares
         int n1R = curR + ((dir == DIRECAO_HORIZONTAL) ? -1 : 0);
         int n1C = curC + ((dir == DIRECAO_HORIZONTAL) ? 0 : -1);
         int n2R = curR + ((dir == DIRECAO_HORIZONTAL) ? 1 : 0);
@@ -106,16 +106,16 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
     if (!grid) return false;
     Generator_Init();
 
-    // 1. Reset Grid (All Blocked/Blue)
+    // 1. Resetar Grid (Tudo Bloqueado/Azul)
     inicializarGrid(grid, TAMANHO_MAX_GRID, TAMANHO_MAX_GRID);
     grid->numPalavras = 0;
 
-    // 2. Determine Difficulty
+    // 2. Determinar Dificuldade
     int targetWords = 6 + (levelIndex * 2); 
     if (targetWords > MAX_PALAVRAS) targetWords = MAX_PALAVRAS;
     
-    // 3. Place First Word (Center)
-    // Get random candidate 5-8 chars
+    // 3. Colocar Primeira Palavra (Centro)
+    // Obter candidato aleatorio 5-8 chars
     int len = 5 + (rand() % 4);
     char** candidates = NULL;
     int numCandidates = 0;
@@ -127,65 +127,65 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
         Palavra* p = &grid->palavras[grid->numPalavras];
         p->direcao = DIRECAO_HORIZONTAL;
         p->tamanho = len;
-        p->inicio.linha = 7; // Center Y
-        p->inicio.coluna = 7 - (len/2); // Center X
+        p->inicio.linha = 7; // Centro Y
+        p->inicio.coluna = 7 - (len/2); // Centro X
         strcpy(p->resposta, startWord);
         strcpy(p->textoAtual, "");
         p->estaCompleta = false;
-        // Fetch definition
+        // Buscar dica
         dict_check_word(p->resposta, p->dica, TAMANHO_MAX_DICA);
         if (strlen(p->dica) == 0) strcpy(p->dica, "Sem Dica");
 
-        // Place on Grid
+        // Colocar no Grid
         for(int k=0; k<len; k++) {
             grid->celulas[p->inicio.linha][p->inicio.coluna + k].letra = p->resposta[k];
             grid->celulas[p->inicio.linha][p->inicio.coluna + k].tipo = CELULA_PREENCHIDA;
         }
         grid->numPalavras++;
     }
-    // Cleanup first candidates
+    // Limpar primeiros candidatos
     if (candidates) {
         for(int i=0; i<numCandidates; i++) free(candidates[i]);
         free(candidates);
     }
     
-    // 4. Grow Loop
+    // 4. Loop de Crescimento
     int fails = 0;
     while (grid->numPalavras < targetWords && fails < 50) {
-        // Pick a random existing word to cross
+        // Escolher uma palavra existente aleatoria para cruzar
         int srcIdx = rand() % grid->numPalavras;
         Palavra* srcP = &grid->palavras[srcIdx];
         
-        // Pick a random intersection point on this word
+        // Escolher ponto de interseccao aleatorio nesta palavra
         int interOffset = rand() % srcP->tamanho;
         char pivotChar = srcP->resposta[interOffset];
         int pivotR = srcP->inicio.linha + ((srcP->direcao == DIRECAO_VERTICAL) ? interOffset : 0);
         int pivotC = srcP->inicio.coluna + ((srcP->direcao == DIRECAO_HORIZONTAL) ? interOffset : 0);
         
-        // New word details
+        // Detalhes da nova palavra
         Direcao newDir = (srcP->direcao == DIRECAO_HORIZONTAL) ? DIRECAO_VERTICAL : DIRECAO_HORIZONTAL;
-        int newLen = 4 + (rand() % 4); // 4 to 7
+        int newLen = 4 + (rand() % 4); // 4 a 7
         
-        // Find a word of newLen that has pivotChar at some position 'j'
+        // Encontrar palavra de newLen que tenha pivotChar em alguma posicao 'j'
         char** searchList = NULL;
         int count = 0;
         dict_search_by_size(newLen, &searchList, &count);
         
         bool placed = false;
         if (count > 0) {
-            // Try 10 random candidates
+            // Tentar 10 candidatos aleatorios
             for(int attempt=0; attempt<10; attempt++) {
                 char* cand = searchList[rand() % count];
                 
-                // Find occurrences of pivotChar in cand
+                // Encontrar ocorrencias de pivotChar em cand
                 for(int j=0; j<newLen; j++) {
                     if (cand[j] == pivotChar) {
-                         // Potential placement
-                         // Start pos of new word
+                         // Colocacao potencial
+                         // Posicao inicial da nova palavra
                          int startR = pivotR - ((newDir == DIRECAO_VERTICAL) ? j : 0);
                          int startC = pivotC - ((newDir == DIRECAO_HORIZONTAL) ? j : 0);
                          
-                         // Check Duplicate
+                         // Verificar Duplicata
                          bool dup = false;
                          for(int w=0; w<grid->numPalavras; w++) {
                              if (strcmp(grid->palavras[w].resposta, cand) == 0) dup = true;
@@ -193,7 +193,7 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
                          if (dup) continue;
 
                          if (IsPlacementValid(grid, startR, startC, newLen, newDir, cand)) {
-                             // Place it!
+                             // Colocar!
                              Palavra* newP = &grid->palavras[grid->numPalavras];
                              newP->direcao = newDir;
                              newP->tamanho = newLen;
@@ -205,7 +205,7 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
                              dict_check_word(newP->resposta, newP->dica, TAMANHO_MAX_DICA);
                              if (strlen(newP->dica) == 0) strcpy(newP->dica, "Sem Dica");
 
-                             // Fill Grid
+                             // Preencher Grid
                              for(int k=0; k<newLen; k++) {
                                  int rr = (newDir==DIRECAO_VERTICAL) ? startR+k : startR;
                                  int cc = (newDir==DIRECAO_HORIZONTAL) ? startC+k : startC;
@@ -231,43 +231,37 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
         if (!placed) fails++; else fails = 0;
     }
     
-    // 5. Finalize: Set all filled cells to EMPTY status (hide letters) logic?
-    // Wait, the game logic requires `CELULA_VAZIA` (Empty white box) to type into.
-    // `CELULA_PREENCHIDA` implies it HAS a letter. 
-    // IsPlacementValid used PREENCHIDA to check collisions.
-    // Now we must convert the generated "Solution Grid" into a "Playable Grid".
+    // 5. Finalizar: Define todas as celulas preenchidas para status VAZIA (esconder letras) logica?
+    // Espere, a logica do jogo requer `CELULA_VAZIA` (Caixa branca vazia) para digitar.
+    // `CELULA_PREENCHIDA` implica que TEM uma letra. 
+    // IsPlacementValid usou PREENCHIDA para checar colisoes.
+    // Agora devemos converter o "Grid Solucao" gerado em um "Grid Jogavel".
     
-    // Actually, `inicializarGrid` sets TIPO to BLOQUEADA (Blue).
-    // Our generator set TIPO to PREENCHIDA (for logic) and LETRA to Answer.
-    // For the game to start, we typically want the letters HIDDEN but cells WHITE (VAZIA).
-    // BUT, the structs say:
-    // CELULA_VAZIA = 0 (White, no letter typed yet)
-    // CELULA_PREENCHIDA = 2 (White, has letter)
-    // We should reset TIPO to CELULA_VAZIA and keep `letra`? 
-    // No, `letra` in struct `Celula` is the *user input*. The Answer is in `Palavra`.
+    // Realmente, `inicializarGrid` define TIPO para BLOQUEADA (Azul).
+    // Nosso gerador definiu TIPO para PREENCHIDA (para logica) e LETRA para Resposta.
+    // Para o jogo comecar, normalmente queremos as letras ESCONDIDAS mas celulas BRANCAS (VAZIA).
     
-    // Correct loop:
     /*
     typedef struct {
         TipoCelula tipo;    // Tipo da célula (vazia, bloqueada, preenchida)
-        char letra;         // Letra atual ('\0' se vazia) ... THIS IS USER INPUT
+        char letra;         // Letra atual ('\0' se vazia) ... ISTO E ENTRADA DO USUARIO
     } Celula;
     */
     
     for(int r=0; r<grid->linhas; r++) {
         for(int c=0; c<grid->colunas; c++) {
             if (grid->celulas[r][c].tipo == CELULA_PREENCHIDA) {
-                grid->celulas[r][c].tipo = CELULA_VAZIA; // Make it white input box
-                grid->celulas[r][c].letra = '\0';        // Clear answer (it is stored in Palavra list)
+                grid->celulas[r][c].tipo = CELULA_VAZIA; // Tornar caixa de entrada branca
+                grid->celulas[r][c].letra = '\0';        // Limpar resposta (esta armazenada na lista Palavra)
             }
-            // Blocked remains Blocked.
+            // Bloqueada permanece Bloqueada.
         }
     }
     
-    // Also Recalculate Numbers
-    // (We need the RecalculateNumbers logic which is usually in `main` or interface?
-    // Actually `interface.c` or logic usually assigns numbers.
-    // Let's implement simple numbering here.
+    // Tambem Recalcular Numeros
+    // Precisamos da logica RecalculateNumbers que geralmente esta em `main` ou interface?
+    // Na verdade `interface.c` ou logica geralmente atribui numeros.
+    // Vamos implementar numeracao simples aqui.
     int n = 1;
     for(int i=0; i<grid->numPalavras; i++) {
         Palavra* p = &grid->palavras[i];

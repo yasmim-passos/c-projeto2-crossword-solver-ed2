@@ -2,6 +2,7 @@
 #include "ui_components.h"
 #include <stdio.h>
 #include <math.h>
+#include <ctype.h>
 
 static int selectedX = -1;
 static int selectedY = -1;
@@ -48,7 +49,7 @@ void DrawCrosswordGrid(Grid* grid, int offsetX, int offsetY, int cellSize) {
             // Desenha fundo da cedula
             DrawRectangleRec(rect, bgColor);
             
-            // Desenha bordas (Blue Lines)
+            // Desenha bordas (Linhas Azuis)
             DrawRectangleLinesEx(rect, 1.0f, UI_COLOR_GRID_LINE);
 
             // Desenha numeros se existir
@@ -65,7 +66,7 @@ void DrawCrosswordGrid(Grid* grid, int offsetX, int offsetY, int cellSize) {
                 int textW = MeasureText(letterStr, fontSize);
                 
                 Color txtColor = UI_COLOR_TEXT;
-                if (grid->celulas[y][x].eFixa) { // Usando eFixa para significar "Verified/Correct"
+                if (grid->celulas[y][x].eFixa) { // Usando eFixa para significar "Verificado/Correto"
                      txtColor = UI_COLOR_CORRECT;
                      DrawText(letterStr, 
                          (int)(rect.x + (cellSize - textW) / 2) + 2, 
@@ -139,10 +140,8 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
                  selectedY = gy;
                  cellScales[gy][gx] = 1.2f;   
              }
-        } else {
-             selectedX = -1;
-             selectedY = -1;
         }
+        // Removed else block to prevent deselection on button click
     }
 
     // Interacao com o teclado (Digitacao)
@@ -154,11 +153,11 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
         } else {
             int key = GetKeyPressed();
             if ((key >= 65 && key <= 90) || (key >= 97 && key <= 122)) { // A-Z
-                 if (key >= 97) key -= 32; // Uppercase
+                 if (key >= 97) key -= 32; // Maiuscula
                  grid->celulas[selectedY][selectedX].letra = (char)key;
                  grid->celulas[selectedY][selectedX].tipo = CELULA_PREENCHIDA;
                  
-                 // Pop animation
+                 // Animacao Pop
                  cellScales[selectedY][selectedX] = 1.5f; 
             } else if (key == KEY_BACKSPACE || key == KEY_DELETE) {
                  grid->celulas[selectedY][selectedX].letra = '\0';
@@ -169,36 +168,49 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
     }
 }
 
-void RevealSelectedWord(Grid* grid) {
-    if (!grid || selectedX < 0 || selectedY < 0) return;
+void RevealNextUnsolvedWord(Grid* grid) {
+    if (!grid) return;
 
+    // Itera sobre as palavras (assumindo que estao ordenadas por numero, como feito no main.c)
     for (int i = 0; i < grid->numPalavras; i++) {
         Palavra* p = &grid->palavras[i];
-        bool covers = false;
+        bool isSolved = true;
         
-        if (p->direcao == DIRECAO_HORIZONTAL) {
-            if (p->inicio.linha == selectedY && 
-                selectedX >= p->inicio.coluna && 
-                selectedX < p->inicio.coluna + p->tamanho) {
-                covers = true;
+        // Verifica se a palavra esta correta no grid
+        int r = p->inicio.linha;
+        int c = p->inicio.coluna;
+        
+        // Se ja marcada como completa, pula
+        // Mas vamos verificar as celulas tambem para garantir
+        for (int k = 0; k < p->tamanho; k++) {
+            char cellLetra = grid->celulas[r][c].letra;
+            // Se letra vazia ou diferente da resposta
+            if (toupper(cellLetra) != toupper(p->resposta[k])) {
+                isSolved = false;
+                break;
             }
-        } else {
-             if (p->inicio.coluna == selectedX && 
-                selectedY >= p->inicio.linha && 
-                selectedY < p->inicio.linha + p->tamanho) {
-                covers = true;
-            }
+            if (p->direcao == DIRECAO_HORIZONTAL) c++; else r++;
         }
 
-        if (covers) {
-            // Fill the word
-            int r = p->inicio.linha;
-            int c = p->inicio.coluna;
+        if (!isSolved) {
+            // Revelar esta palavra!
+            r = p->inicio.linha;
+            c = p->inicio.coluna;
             for (int k = 0; k < p->tamanho; k++) {
                 grid->celulas[r][c].letra = p->resposta[k];
                 grid->celulas[r][c].tipo = CELULA_PREENCHIDA;
+                // Opcional: Marcar como fixa (verde) imediatamente?
+                // O usuario pediu para REVELAR. Geralmente isso implica dar a resposta correta.
+                // Vamos deixar como normal, o usuario pode clicar em VERIFICAR depois se quiser.
+                // Mas cheat geralmente e definitivo. Vamos deixar editavel ou nao?
+                // Se o usuario apagar, ele perde a dica?
+                // Melhor nao marcar eFixa, assim ele pode ver que foi preenchido mas nao validado ainda (verde).
+                // OU, marcar eFixa para mostrar que e a resposta oficial.
+                // Dado "Pular Palavra" -> Skip logic imply done.
+                // Vamos preencher.
                 if (p->direcao == DIRECAO_HORIZONTAL) c++; else r++;
             }
+            return; // Revela apenas uma
         }
     }
 }

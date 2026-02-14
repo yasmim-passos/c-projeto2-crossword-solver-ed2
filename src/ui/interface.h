@@ -15,7 +15,7 @@ void DrawSolverStatus(bool is_running, int steps);
 // Atualiza logica para interacoes UI
 void UpdateInterface(Grid* grid, EstadoJogo* estado);
 
-// Revela a palavra selecionada (Cheat/Skip)
-void RevealSelectedWord(Grid* grid);
+// Revela a proxima palavra nao resolvida (Cheat)
+void RevealNextUnsolvedWord(Grid* grid);
 
 #endif // INTERFACE_H

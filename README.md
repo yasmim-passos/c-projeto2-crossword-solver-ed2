@@ -89,7 +89,7 @@ Aplicar na prática conceitos de:
 │   │   └── structs.h       # Definições de tipos
 │   │
 │   ├── external/
-│   │   ├── api_client.c    # Cliente API (simulado)
+│   │   ├── api_client.c    # Cliente API
 │   │   └── api_client.h
 │
 ├── data_files/
@@ -127,4 +127,3 @@ Aplicar na prática conceitos de:
 * Yasmim Passos ([@yasmim-passos](https://github.com/yasmim-passos/))
 
 Projeto realizado em grupo como atividade avaliativa da disciplina de Estrutura de Dados II, na Universidade Federal de Sergipe (UFS).
-

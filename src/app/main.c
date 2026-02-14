@@ -79,7 +79,7 @@ void FinalizeGrid(Grid* g);
 void FinalizeGrid(Grid* g) {
     bool used[TAMANHO_MAX_GRID][TAMANHO_MAX_GRID] = {0};
     
-    // Marca actively used cells
+    // Marca celulas ativamente usadas
     for(int i=0; i<g->numPalavras; i++) {
         int r = g->palavras[i].inicio.linha;
         int c = g->palavras[i].inicio.coluna;
@@ -106,7 +106,7 @@ void FinalizeGrid(Grid* g) {
 // Auxiliar para auto-numerar grid de forma sequencial
 void RecalculateNumbers(Grid* g) {
     int nextNum = 1;
-    // Limpar numeros velhos
+    // Limpar numeros antigos
     for(int y=0; y<g->linhas; y++) {
         for(int x=0; x<g->colunas; x++) {
             g->celulas[y][x].numero = 0;
@@ -135,17 +135,17 @@ void RecalculateNumbers(Grid* g) {
 }
 
 void LoadLevel(int level, Grid* g) {
-    // Reset Grid
+    // Resetar Grid
     inicializarGrid(g, TAMANHO_MAX_GRID, TAMANHO_MAX_GRID);
     g->numPalavras = 0;
     
-    // Always use Generator for Infinite Progression
+    // Sempre usar Gerador para Progressao Infinita
     if (!Generator_GenerateLevel(g, level)) {
-        printf("Generator failed for level %d. Retrying...\n", level);
+        printf("Generator falhou para nivel %d. Tentando novamente...\n", level);
         if (!Generator_GenerateLevel(g, level)) {
-             printf("Generator fatal error.\n");
+             printf("Erro fatal no Generator.\n");
              // Fallback to a single word if everything explodes?
-             // But generator should be robust.
+             // Mas o generator deve ser robusto.
         }
     }
 
@@ -196,7 +196,7 @@ void LoadLevel(int level, Grid* g) {
     RecalculateNumbers(g); // AUTO-AJUSTA NUMEROS
     FinalizeGrid(g);       // MARCA NAO USADOS
     
-    // Sorteia palavras pelo numero do grid
+    // Sort words by grid number
     for(int i=0; i<g->numPalavras-1; i++) {
         for(int j=0; j<g->numPalavras-i-1; j++) {
             int numA = g->celulas[g->palavras[j].inicio.linha][g->palavras[j].inicio.coluna].numero;
@@ -228,12 +228,12 @@ int main() {
     char statusMsg[64] = "";
     bool gameOver = false;
     
-    // Init state
+    // Inic Estado
     currentLevel = 1;
     grandTotalTime = 0;
     grandTotalErrors = 0;
-    strcpy(globalLanguage, "PT"); // Default
-    dict_set_language("PT");      // Initialize Dictionary Language
+    strcpy(globalLanguage, "PT"); // Padrao
+    dict_set_language("PT");      // Inicializa Linguagem Dicionario
     
     while (!WindowShouldClose()) {
         BeginDrawing();
@@ -275,7 +275,7 @@ int main() {
                     // TELA DE VITORIA
                     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(UI_COLOR_BG, 0.9f));
                     
-                    if (true) { // ALWAYS ALLOW NEXT LEVEL (Infinite Mode)
+                    if (true) { // SEMPRE PERMITIR PROXIMO NIVEL (Modo Infinito)
                          // Tela de proximo nivel
                          if (currentLevel >= 3) {
                              DrawTextCentered("NIVEL CONCLUIDO! (MODO INFINITO)", GetScreenWidth()/2, 200, 40, UI_COLOR_PRIMARY);
@@ -295,7 +295,7 @@ int main() {
                              gameOver = false; palavrasCorretas = 0;
                          }
                          
-                         // Option to Stop
+                         // Opcao de Parar
                          if (GuiButton((Rectangle){GetScreenWidth()/2 - 150, 460, 300, 50}, "PARAR E SAIR")) {
                              cenaAtual = CENA_MENU;
                              currentLevel = 1; grandTotalTime=0; grandTotalErrors=0;
@@ -304,7 +304,7 @@ int main() {
                 } else {
                     UpdateInterface(g, &estado);
                     
-                    // Header
+                    // Cabecalho
                     DrawText("Palavras Cruzadas", 40, 20, 30, UI_COLOR_PRIMARY);
                     char infoStr[64];
                     snprintf(infoStr, 64, "Idioma: %s - Nivel %d | Acertos: %d/%d", idiomaAtual, currentLevel, palavrasCorretas, g->numPalavras);
@@ -316,6 +316,7 @@ int main() {
                     // Dicas
                     int colDicas = 550;
                     int startY = 100;
+                    int maxClueWidth = 430; // 1024 - 550 - padding
                     
                     // Horizontal
                     DrawText("HORIZONTAIS", colDicas, startY, 20, UI_COLOR_PRIMARY);
@@ -324,11 +325,34 @@ int main() {
                     
                     for(int i=0; i<g->numPalavras; i++) {
                         if (g->palavras[i].direcao == DIRECAO_HORIZONTAL) {
-                             char clueLine[100];
-                             snprintf(clueLine, 100, "%d. %s", g->celulas[g->palavras[i].inicio.linha][g->palavras[i].inicio.coluna].numero, g->palavras[i].dica);
+                             char clueLine[256];
+                             snprintf(clueLine, 256, "%d. %s", g->celulas[g->palavras[i].inicio.linha][g->palavras[i].inicio.coluna].numero, g->palavras[i].dica);
+                             
+                             // Quebra de linha manual se necessario
+                             char displayLine[256] = "";
+                             int currentLineWidth = 0;
+                             int lineCount = 1;
+                             
+                             char* word = strtok(clueLine, " ");
+                             while (word != NULL) {
+                                int wordW = MeasureText(word, 14);
+                                int spaceW = MeasureText(" ", 14);
+                                
+                                if (currentLineWidth + wordW + spaceW > maxClueWidth) {
+                                    strcat(displayLine, "\n   "); // Indentacao na nova linha
+                                    currentLineWidth = MeasureText("   ", 14);
+                                    lineCount++;
+                                }
+                                
+                                strcat(displayLine, word);
+                                strcat(displayLine, " ");
+                                currentLineWidth += wordW + spaceW;
+                                word = strtok(NULL, " ");
+                             }
+
                              if (startY < 380) { 
-                                 DrawText(clueLine, colDicas, startY, 14, UI_COLOR_TEXT);
-                                 startY += 18;
+                                 DrawText(displayLine, colDicas, startY, 14, UI_COLOR_TEXT);
+                                 startY += (18 * lineCount);
                              }
                         }
                     }
@@ -340,19 +364,45 @@ int main() {
 
                      for(int i=0; i<g->numPalavras; i++) {
                         if (g->palavras[i].direcao == DIRECAO_VERTICAL) {
-                             char clueLine[100];
-                             snprintf(clueLine, 100, "%d. %s", g->celulas[g->palavras[i].inicio.linha][g->palavras[i].inicio.coluna].numero, g->palavras[i].dica);
-                             if (startY < 640) {
-                                 DrawText(clueLine, colDicas, startY, 14, UI_COLOR_TEXT);
-                                 startY += 18;
+                             char clueLine[256];
+                             snprintf(clueLine, 256, "%d. %s", g->celulas[g->palavras[i].inicio.linha][g->palavras[i].inicio.coluna].numero, g->palavras[i].dica);
+                             
+                             // Quebra de linha manual
+                             char displayLine[256] = ""; 
+                             // Nota: strtok modifica a string original, entao precisamos de copias se quisessemos reusar clueLine, 
+                             // mas aqui eh local loop var.
+                             
+                             int currentLineWidth = 0;
+                             int lineCount = 1;
+                             
+                             char* word = strtok(clueLine, " ");
+                             while (word != NULL) {
+                                int wordW = MeasureText(word, 14);
+                                int spaceW = MeasureText(" ", 14);
+                                
+                                if (currentLineWidth + wordW + spaceW > maxClueWidth) {
+                                    strcat(displayLine, "\n   "); 
+                                    currentLineWidth = MeasureText("   ", 14);
+                                    lineCount++;
+                                }
+                                
+                                strcat(displayLine, word);
+                                strcat(displayLine, " ");
+                                currentLineWidth += wordW + spaceW;
+                                word = strtok(NULL, " ");
+                             }
+
+                             if (startY < 600) { // um pouco menos espaco para verticais nao baterem nos botoes
+                                 DrawText(displayLine, colDicas, startY, 14, UI_COLOR_TEXT);
+                                 startY += (18 * lineCount);
                              }
                         }
                     }
 
-                    // Botão Verificar
+                    // Botão Pular Palavra
                     if (GuiButton((Rectangle){ (float)colDicas, 600, 220, 40}, "PULAR PALAVRA")) {
-                        RevealSelectedWord(g);
-                        RecalculateNumbers(g); // Just in case, harmless
+                        RevealNextUnsolvedWord(g);
+                        RecalculateNumbers(g); // Apenas por precaucao
                     }
 
                     if (GuiButton((Rectangle){ (float)colDicas, 650, 220, 40}, "VERIFICAR")) {
@@ -396,7 +446,7 @@ int main() {
                         }
                     }
                     
-                    DrawText(statusMsg, colDicas + 170, 660, 20, UI_COLOR_CORRECT);
+                    DrawText(statusMsg, colDicas, 700, 20, UI_COLOR_CORRECT);
                     
                     if (GuiButton((Rectangle){40, 680, 120, 40}, "VOLTAR")) {
                         cenaAtual = CENA_MENU;
