@@ -72,6 +72,8 @@ Aplicar na prática conceitos de:
 │   │   └── ui_components.h
 │   │
 │   ├── game/
+|   |   |── puzzle_generator.c #Puzzles infinitos
+|   |   |── puzzle_generator.h
 │   │   ├── solver.c        # Algoritmo de Backtracking
 │   │   ├── solver.h
 │   │   ├── validation.c    # Regras de validação
@@ -125,3 +127,4 @@ Aplicar na prática conceitos de:
 * Yasmim Passos ([@yasmim-passos](https://github.com/yasmim-passos/))
 
 Projeto realizado em grupo como atividade avaliativa da disciplina de Estrutura de Dados II, na Universidade Federal de Sergipe (UFS).
+
