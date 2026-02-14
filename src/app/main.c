@@ -15,12 +15,16 @@ typedef enum {
     CENA_MENU, 
     CENA_AJUDA, 
     CENA_IDIOMA, 
-    CENA_JOGO 
+    CENA_JOGO,
+    CENA_RELATORIO
 } CenaJogo;
 
 // Estado Global
 static CenaJogo cenaAtual = CENA_MENU;
 static char idiomaAtual[3] = "EN"; // EN ou PT
+
+int grandTotalWords = 0;
+int levelsCompleted = 0;
 
 void DesenharMenuPrincipal() {
     DrawTextCentered("PALAVRAS CRUZADAS", GetScreenWidth()/2, 100, 50, BLACK);
@@ -69,9 +73,48 @@ double startTime;
 int gameErrors = 0;
 int currentLevel = 1;
 int maxLevels = 3;
+
+// Global Score Tracking (Infinite Mode)
 double grandTotalTime = 0;
 int grandTotalErrors = 0;
-char globalLanguage[4] = "PT";
+
+// Global settings
+char globalLanguage[3] = "EN";
+
+// Tela de Relatorio Final
+void DesenharTelaRelatorio() {
+    DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), UI_COLOR_BG);
+    
+    DrawTextCentered("RELATORIO FINAL", GetScreenWidth()/2, 100, 50, UI_COLOR_PRIMARY);
+    
+    char statsStr[128];
+    
+    // Niveis Completados
+    snprintf(statsStr, 128, "Niveis Completados: %d", levelsCompleted);
+    DrawTextCentered(statsStr, GetScreenWidth()/2, 250, 30, DARKGRAY);
+    
+    // Palavras Acertadas
+    snprintf(statsStr, 128, "Palavras Acertadas: %d", grandTotalWords);
+    DrawTextCentered(statsStr, GetScreenWidth()/2, 300, 30, DARKGRAY);
+
+    // Tempo Total
+    snprintf(statsStr, 128, "Tempo Total: %.0fs", grandTotalTime);
+    DrawTextCentered(statsStr, GetScreenWidth()/2, 350, 30, DARKGRAY);
+    
+    // Erros Totais
+    snprintf(statsStr, 128, "Erros Totais: %d", grandTotalErrors);
+    DrawTextCentered(statsStr, GetScreenWidth()/2, 400, 30, DARKGRAY);
+    
+    if (GuiButton((Rectangle){GetScreenWidth()/2 - 150, 550, 300, 50}, "VOLTAR AO MENU")) {
+        cenaAtual = CENA_MENU;
+        // Reset globals
+        currentLevel = 1; 
+        grandTotalTime = 0; 
+        grandTotalErrors = 0;
+        grandTotalWords = 0;
+        levelsCompleted = 0;
+    }
+}
 
 void FinalizeGrid(Grid* g);
 
@@ -270,6 +313,10 @@ int main() {
                 if (GuiButton((Rectangle){GetScreenWidth()/2 - 100, 500, 200, 50}, "VOLTAR")) { cenaAtual = CENA_MENU; }
                 break;
                 
+            case CENA_RELATORIO:
+                DesenharTelaRelatorio();
+                break;
+                
             case CENA_JOGO:
                 if (gameOver) {
                     // TELA DE VITORIA
@@ -290,6 +337,8 @@ int main() {
                          if (GuiButton((Rectangle){GetScreenWidth()/2 - 150, 400, 300, 50}, "PROXIMO NIVEL")) {
                              grandTotalTime += (GetTime() - startTime);
                              grandTotalErrors += gameErrors;
+                             grandTotalWords += palavrasCorretas; // Acumula palavras
+                             
                              currentLevel++;
                              LoadLevel(currentLevel, g);
                              gameOver = false; palavrasCorretas = 0;
@@ -297,8 +346,13 @@ int main() {
                          
                          // Opcao de Parar
                          if (GuiButton((Rectangle){GetScreenWidth()/2 - 150, 460, 300, 50}, "PARAR E SAIR")) {
-                             cenaAtual = CENA_MENU;
-                             currentLevel = 1; grandTotalTime=0; grandTotalErrors=0;
+                             // Acumula stats finais antes de sair
+                             grandTotalTime += (GetTime() - startTime);
+                             grandTotalErrors += gameErrors;
+                             grandTotalWords += palavrasCorretas;
+                             levelsCompleted = currentLevel; // Completou este nivel
+                             
+                             cenaAtual = CENA_RELATORIO;
                          }
                     }
                 } else {

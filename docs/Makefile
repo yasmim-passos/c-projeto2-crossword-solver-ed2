@@ -1,34 +1,42 @@
-# Makefile for Palavras Cruzadas (Windows MinGW/w64devkit)
+# Makefile para Palavras Cruzadas (Raylib)
 
-# Compiler and paths
+# Compilador e Caminhos
 CC = gcc
-RAYLIB_PATH ?= C:/raylib/w64devkit
-
-# Flags
+RAYLIB_PATH = C:/raylib/w64devkit
 CFLAGS = -g -std=c99 -Wall -Wno-missing-braces -I$(RAYLIB_PATH)/include -IC:/raylib/raylib/src -IC:/raylib/include -Isrc
 LDFLAGS = -L$(RAYLIB_PATH)/lib -Lsrc -lraylib -lopengl32 -lgdi32 -lwinmm
 
-# Source files
-SRC = src/app/main.c \
-      src/ui/interface.c \
-      src/ui/ui_components.c \
-      src/data/dictionary.c \
-      src/data/grid.c \
-      src/external/api_client.c \
-      src/game/solver.c \
-      src/game/validation.c \
-      src/game/puzzle_generator.c \
-      src/game/game_mode.c
+# Diretorios
+SRC_DIR = src
+BIN_DIR = bin
+
+# Arquivos
+SOURCES = $(SRC_DIR)/app/main.c \
+          $(SRC_DIR)/ui/interface.c \
+          $(SRC_DIR)/ui/ui_components.c \
+          $(SRC_DIR)/data/dictionary.c \
+          $(SRC_DIR)/data/grid.c \
+          $(SRC_DIR)/external/api_client.c \
+          $(SRC_DIR)/game/solver.c \
+          $(SRC_DIR)/game/validation.c \
+          $(SRC_DIR)/game/game_mode.c
 
 # Output
-TARGET = bin/main.exe
+TARGET = $(BIN_DIR)/main.exe
 
-# Rules
+# Regras
 all: $(TARGET)
 
-$(TARGET): $(SRC)
-	mkdir -p bin
-	$(CC) $(SRC) -o $(TARGET) $(CFLAGS) $(LDFLAGS)
+$(TARGET): $(SOURCES)
+	@if not exist "$(BIN_DIR)" mkdir "$(BIN_DIR)"
+	$(CC) $(SOURCES) -o $(TARGET) $(CFLAGS) $(LDFLAGS)
+	@echo Build successful! Executable is in $(TARGET)
+
+run: all
+	$(TARGET)
 
 clean:
-	rm -f bin/main.exe
+	@if exist "$(BIN_DIR)" rmdir /s /q "$(BIN_DIR)"
+	@echo Cleaned up bin directory.
+
+.PHONY: all run clean

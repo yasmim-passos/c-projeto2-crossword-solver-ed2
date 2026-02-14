@@ -102,6 +102,178 @@ static bool IsPlacementValid(Grid* g, int row, int col, int len, Direcao dir, co
 }
 
 
+// Retorna true se conseguiu preencher ate o alvo
+static bool BacktrackGenerate(Grid* grid, int targetWords) {
+    // Base Case: Alvo atingido
+    if (grid->numPalavras >= targetWords) return true;
+
+    // Tenta encontrar uma nova palavra para colocar
+    // Estrategia: Iterar sobre palavras ja colocadas, escolher uma interseccao, tentar palavras do dicionario
+    
+    // Para garantir variedade, criamos indices aleatorios para iterar
+    int* wordIndices = (int*)malloc(grid->numPalavras * sizeof(int));
+    for(int i=0; i<grid->numPalavras; i++) wordIndices[i] = i;
+    // Shuffle indices
+    for(int i=grid->numPalavras-1; i>0; i--) {
+        int j = rand() % (i+1);
+        int temp = wordIndices[i];
+        wordIndices[i] = wordIndices[j];
+        wordIndices[j] = temp;
+    }
+
+    for (int idx = 0; idx < grid->numPalavras; idx++) {
+        int i = wordIndices[idx];
+        Palavra* srcP = &grid->palavras[i];
+        
+        // Tenta todas as posicoes desta palavra para cruzar
+        // Shuffle positions too?
+        int len = srcP->tamanho;
+        int* charIndices = (int*)malloc(len * sizeof(int));
+        for(int k=0; k<len; k++) charIndices[k] = k;
+        // Shuffle char indices
+        for(int k=len-1; k>0; k--) {
+            int j = rand() % (k+1);
+            int temp = charIndices[k];
+            charIndices[k] = charIndices[j];
+            charIndices[j] = temp;
+        }
+
+        for(int cIdx = 0; cIdx < len; cIdx++) {
+            int interOffset = charIndices[cIdx];
+            char pivotChar = srcP->resposta[interOffset];
+            int pivotR = srcP->inicio.linha + ((srcP->direcao == DIRECAO_VERTICAL) ? interOffset : 0);
+            int pivotC = srcP->inicio.coluna + ((srcP->direcao == DIRECAO_HORIZONTAL) ? interOffset : 0);
+            
+            Direcao newDir = (srcP->direcao == DIRECAO_HORIZONTAL) ? DIRECAO_VERTICAL : DIRECAO_HORIZONTAL;
+            
+            // Tentar tamanhos variados
+            // Shuffle sizes 4-7
+            int sizes[] = {4, 5, 6, 7};
+            // shuffle sizes
+             for(int s=3; s>0; s--) {
+                int j = rand() % (s+1);
+                int temp = sizes[s];
+                sizes[s] = sizes[j];
+                sizes[j] = temp;
+            }
+
+            for(int szIdx=0; szIdx<4; szIdx++) {
+                int newLen = sizes[szIdx];
+                
+                char** searchList = NULL;
+                int count = 0;
+                dict_search_by_size(newLen, &searchList, &count);
+                
+                if (count > 0) {
+                     // Tentar candidatos (limite para nao demorar muito no backtrack)
+                     // Shuffle candidates ou pegar random subset
+                     int tries = (count > 15) ? 15 : count;
+                     int* candIndices = (int*)malloc(count * sizeof(int));
+                     for(int ci=0; ci<count; ci++) candIndices[ci] = ci;
+                      // Shuffle cand indices partial
+                    for(int ci=0; ci<tries; ci++) {
+                        int rnd = rand() % count; // Simple random pick better for speed than full shuffle large list
+                        int temp = candIndices[ci];
+                        candIndices[ci] = candIndices[rnd];
+                        candIndices[rnd] = temp;
+                    }
+                     
+                     for(int attempt=0; attempt<tries; attempt++) {
+                         char* cand = searchList[candIndices[attempt]];
+                         
+                         // Verifica se cand tem pivotChar
+                         for(int j=0; j<newLen; j++) {
+                             if (cand[j] == pivotChar) {
+                                  // Candidato match!
+                                  int startR = pivotR - ((newDir == DIRECAO_VERTICAL) ? j : 0);
+                                  int startC = pivotC - ((newDir == DIRECAO_HORIZONTAL) ? j : 0);
+                                  
+                                  // Check Dup
+                                  bool dup = false;
+                                  for(int w=0; w<grid->numPalavras; w++) {
+                                      if (strcmp(grid->palavras[w].resposta, cand) == 0) dup = true;
+                                  }
+                                  if (dup) continue;
+
+                                  if (IsPlacementValid(grid, startR, startC, newLen, newDir, cand)) {
+                                      // DO: Place Word
+                                      int currentIdx = grid->numPalavras;
+                                      Palavra* newP = &grid->palavras[currentIdx];
+                                      newP->direcao = newDir;
+                                      newP->tamanho = newLen;
+                                      newP->inicio.linha = startR;
+                                      newP->inicio.coluna = startC;
+                                      strcpy(newP->resposta, cand);
+                                      
+                                      // Preenche celulas
+                                       for(int k=0; k<newLen; k++) {
+                                         int rr = (newDir==DIRECAO_VERTICAL) ? startR+k : startR;
+                                         int cc = (newDir==DIRECAO_HORIZONTAL) ? startC+k : startC;
+                                         grid->celulas[rr][cc].letra = cand[k];
+                                         grid->celulas[rr][cc].tipo = CELULA_PREENCHIDA;
+                                      }
+                                      grid->numPalavras++;
+
+                                      // RECURSE
+                                      if (BacktrackGenerate(grid, targetWords)) {
+                                          free(candIndices);
+                                          if (searchList) { for(int xx=0; xx<count; xx++) free(searchList[xx]); free(searchList); }
+                                          free(charIndices);
+                                          free(wordIndices);
+                                          return true; // Sucesso propagates up
+                                      }
+                                      
+                                      // UNDO (Backtrack)
+                                      grid->numPalavras--;
+                                      // Restaurar celulas... Cuidado!
+                                      // Se removermos cells, podemos apagar interseccoes de outras palavras?
+                                      // NAO, porque so adicionamos. Mas precisamos restaurar o estado ANTERIOR.
+                                      // Celulas que ERAM vazias voltam a ser vazias/bloqueadas.
+                                      // Celulas que ERAM preenchidas (cruzamentos) devem manter.
+                                      // IsPlacementValid garante que so tocou em VAZIA, BLOQUEADA ou PREENCHIDA-IGUAL.
+                                      // Entao:
+                                      for(int k=0; k<newLen; k++) {
+                                         int rr = (newDir==DIRECAO_VERTICAL) ? startR+k : startR;
+                                         int cc = (newDir==DIRECAO_HORIZONTAL) ? startC+k : startC;
+                                         
+                                         // Verificar se pertence a OUTRA palavra antes de limpar
+                                         bool belongsToOther = false;
+                                         for(int ow=0; ow<grid->numPalavras; ow++) {
+                                             Palavra* other = &grid->palavras[ow];
+                                             // Verifica se (rr,cc) esta em 'other'
+                                             bool inOther = false;
+                                             if (other->direcao == DIRECAO_HORIZONTAL) {
+                                                 if (rr == other->inicio.linha && cc >= other->inicio.coluna && cc < other->inicio.coluna + other->tamanho) inOther = true;
+                                             } else {
+                                                  if (cc == other->inicio.coluna && rr >= other->inicio.linha && rr < other->inicio.linha + other->tamanho) inOther = true;
+                                             }
+                                             if (inOther) { belongsToOther = true; break; }
+                                         }
+                                         
+                                         if (!belongsToOther) {
+                                             grid->celulas[rr][cc].tipo = CELULA_BLOQUEADA; // Default do Init
+                                             grid->celulas[rr][cc].letra = '\0';
+                                         }
+                                      }
+                                  }
+                             }
+                         }
+                     }
+                     free(candIndices);
+                }
+                if (searchList) {
+                    for(int i=0; i<count; i++) free(searchList[i]);
+                    free(searchList);
+                }
+            }
+        }
+        free(charIndices);
+    }
+    free(wordIndices);
+    
+    return false; // Falhou em ramificar daqui
+}
+
 bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
     if (!grid) return false;
     Generator_Init();
@@ -114,8 +286,7 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
     int targetWords = 6 + (levelIndex * 2); 
     if (targetWords > MAX_PALAVRAS) targetWords = MAX_PALAVRAS;
     
-    // 3. Colocar Primeira Palavra (Centro)
-    // Obter candidato aleatorio 5-8 chars
+    // 3. Colocar Primeira Palavra (Base da Arvore)
     int len = 5 + (rand() % 4);
     char** candidates = NULL;
     int numCandidates = 0;
@@ -123,152 +294,59 @@ bool Generator_GenerateLevel(Grid* grid, int levelIndex) {
     
     if (numCandidates > 0) {
         char* startWord = candidates[rand() % numCandidates];
-        
+        // ... (Mesma logica de inicializacao)
         Palavra* p = &grid->palavras[grid->numPalavras];
         p->direcao = DIRECAO_HORIZONTAL;
         p->tamanho = len;
-        p->inicio.linha = 7; // Centro Y
-        p->inicio.coluna = 7 - (len/2); // Centro X
+        p->inicio.linha = 7; 
+        p->inicio.coluna = 7 - (len/2); 
         strcpy(p->resposta, startWord);
         strcpy(p->textoAtual, "");
         p->estaCompleta = false;
-        // Buscar dica
-        dict_check_word(p->resposta, p->dica, TAMANHO_MAX_DICA);
-        if (strlen(p->dica) == 0) strcpy(p->dica, "Sem Dica");
-
-        // Colocar no Grid
-        for(int k=0; k<len; k++) {
+        
+         for(int k=0; k<len; k++) {
             grid->celulas[p->inicio.linha][p->inicio.coluna + k].letra = p->resposta[k];
             grid->celulas[p->inicio.linha][p->inicio.coluna + k].tipo = CELULA_PREENCHIDA;
         }
         grid->numPalavras++;
+    
+        // 4. Iniciar Backtracking
+        if (!BacktrackGenerate(grid, targetWords)) {
+            // Se falhou, tenta pelo menos retornar o que conseguiu se for "decente"
+            if (grid->numPalavras < 3) {
+                 // Retry complete reset? Or just accept?
+                 // Vamos aceitar para nao travar.
+            }
+        }
     }
-    // Limpar primeiros candidatos
-    if (candidates) {
+    
+    // Limpeza Dict
+     if (candidates) {
         for(int i=0; i<numCandidates; i++) free(candidates[i]);
         free(candidates);
     }
-    
-    // 4. Loop de Crescimento
-    int fails = 0;
-    while (grid->numPalavras < targetWords && fails < 50) {
-        // Escolher uma palavra existente aleatoria para cruzar
-        int srcIdx = rand() % grid->numPalavras;
-        Palavra* srcP = &grid->palavras[srcIdx];
-        
-        // Escolher ponto de interseccao aleatorio nesta palavra
-        int interOffset = rand() % srcP->tamanho;
-        char pivotChar = srcP->resposta[interOffset];
-        int pivotR = srcP->inicio.linha + ((srcP->direcao == DIRECAO_VERTICAL) ? interOffset : 0);
-        int pivotC = srcP->inicio.coluna + ((srcP->direcao == DIRECAO_HORIZONTAL) ? interOffset : 0);
-        
-        // Detalhes da nova palavra
-        Direcao newDir = (srcP->direcao == DIRECAO_HORIZONTAL) ? DIRECAO_VERTICAL : DIRECAO_HORIZONTAL;
-        int newLen = 4 + (rand() % 4); // 4 a 7
-        
-        // Encontrar palavra de newLen que tenha pivotChar em alguma posicao 'j'
-        char** searchList = NULL;
-        int count = 0;
-        dict_search_by_size(newLen, &searchList, &count);
-        
-        bool placed = false;
-        if (count > 0) {
-            // Tentar 10 candidatos aleatorios
-            for(int attempt=0; attempt<10; attempt++) {
-                char* cand = searchList[rand() % count];
-                
-                // Encontrar ocorrencias de pivotChar em cand
-                for(int j=0; j<newLen; j++) {
-                    if (cand[j] == pivotChar) {
-                         // Colocacao potencial
-                         // Posicao inicial da nova palavra
-                         int startR = pivotR - ((newDir == DIRECAO_VERTICAL) ? j : 0);
-                         int startC = pivotC - ((newDir == DIRECAO_HORIZONTAL) ? j : 0);
-                         
-                         // Verificar Duplicata
-                         bool dup = false;
-                         for(int w=0; w<grid->numPalavras; w++) {
-                             if (strcmp(grid->palavras[w].resposta, cand) == 0) dup = true;
-                         }
-                         if (dup) continue;
 
-                         if (IsPlacementValid(grid, startR, startC, newLen, newDir, cand)) {
-                             // Colocar!
-                             Palavra* newP = &grid->palavras[grid->numPalavras];
-                             newP->direcao = newDir;
-                             newP->tamanho = newLen;
-                             newP->inicio.linha = startR;
-                             newP->inicio.coluna = startC;
-                             strcpy(newP->resposta, cand);
-                             strcpy(newP->textoAtual, "");
-                             newP->estaCompleta = false;
-                             dict_check_word(newP->resposta, newP->dica, TAMANHO_MAX_DICA);
-                             if (strlen(newP->dica) == 0) strcpy(newP->dica, "Sem Dica");
-
-                             // Preencher Grid
-                             for(int k=0; k<newLen; k++) {
-                                 int rr = (newDir==DIRECAO_VERTICAL) ? startR+k : startR;
-                                 int cc = (newDir==DIRECAO_HORIZONTAL) ? startC+k : startC;
-                                 grid->celulas[rr][cc].letra = cand[k];
-                                 grid->celulas[rr][cc].tipo = CELULA_PREENCHIDA;
-                             }
-                             
-                             grid->numPalavras++;
-                             placed = true;
-                             break;
-                         }
-                    }
-                }
-                if (placed) break;
-            }
-        }
-        
-        if (searchList) {
-            for(int i=0; i<count; i++) free(searchList[i]);
-            free(searchList);
-        }
-        
-        if (!placed) fails++; else fails = 0;
+    // 5. Finalizar (Converter para Jogavel)
+    // Preencher Dicas e limpar celulas para jogabilidade
+    for(int i=0; i<grid->numPalavras; i++) {
+        dict_check_word(grid->palavras[i].resposta, grid->palavras[i].dica, TAMANHO_MAX_DICA);
+        if (strlen(grid->palavras[i].dica) == 0) strcpy(grid->palavras[i].dica, "Sem Dica");
+         grid->palavras[i].estaCompleta = false;
+         strcpy(grid->palavras[i].textoAtual, "");
+         
+         // Numeros
+         int r = grid->palavras[i].inicio.linha;
+         int c = grid->palavras[i].inicio.coluna;
+         if(grid->celulas[r][c].numero == 0) grid->celulas[r][c].numero = i+1; // Temporario, main reordena
     }
-    
-    // 5. Finalizar: Define todas as celulas preenchidas para status VAZIA (esconder letras) logica?
-    // Espere, a logica do jogo requer `CELULA_VAZIA` (Caixa branca vazia) para digitar.
-    // `CELULA_PREENCHIDA` implica que TEM uma letra. 
-    // IsPlacementValid usou PREENCHIDA para checar colisoes.
-    // Agora devemos converter o "Grid Solucao" gerado em um "Grid Jogavel".
-    
-    // Realmente, `inicializarGrid` define TIPO para BLOQUEADA (Azul).
-    // Nosso gerador definiu TIPO para PREENCHIDA (para logica) e LETRA para Resposta.
-    // Para o jogo comecar, normalmente queremos as letras ESCONDIDAS mas celulas BRANCAS (VAZIA).
-    
-    /*
-    typedef struct {
-        TipoCelula tipo;    // Tipo da célula (vazia, bloqueada, preenchida)
-        char letra;         // Letra atual ('\0' se vazia) ... ISTO E ENTRADA DO USUARIO
-    } Celula;
-    */
-    
+
     for(int r=0; r<grid->linhas; r++) {
         for(int c=0; c<grid->colunas; c++) {
             if (grid->celulas[r][c].tipo == CELULA_PREENCHIDA) {
-                grid->celulas[r][c].tipo = CELULA_VAZIA; // Tornar caixa de entrada branca
-                grid->celulas[r][c].letra = '\0';        // Limpar resposta (esta armazenada na lista Palavra)
+                grid->celulas[r][c].tipo = CELULA_VAZIA; 
+                grid->celulas[r][c].letra = '\0';        
             }
-            // Bloqueada permanece Bloqueada.
         }
     }
-    
-    // Tambem Recalcular Numeros
-    // Precisamos da logica RecalculateNumbers que geralmente esta em `main` ou interface?
-    // Na verdade `interface.c` ou logica geralmente atribui numeros.
-    // Vamos implementar numeracao simples aqui.
-    int n = 1;
-    for(int i=0; i<grid->numPalavras; i++) {
-        Palavra* p = &grid->palavras[i];
-        if (grid->celulas[p->inicio.linha][p->inicio.coluna].numero == 0) {
-             grid->celulas[p->inicio.linha][p->inicio.coluna].numero = n++;
-        }
-    }
-
     return true;
 }
