@@ -1,16 +1,16 @@
-# Makefile for Crossword Puzzle (Raylib)
+# Makefile para Palavras Cruzadas (Raylib)
 
-# Compiler and Paths
+# Compilador e Caminhos
 CC = gcc
 RAYLIB_PATH = C:/raylib/w64devkit
 CFLAGS = -g -std=c99 -Wall -Wno-missing-braces -I$(RAYLIB_PATH)/include -IC:/raylib/raylib/src -IC:/raylib/include -Isrc
 LDFLAGS = -L$(RAYLIB_PATH)/lib -Lsrc -lraylib -lopengl32 -lgdi32 -lwinmm
 
-# Directories
+# Diretorios
 SRC_DIR = src
 BIN_DIR = bin
 
-# Source Files
+# Arquivos
 SOURCES = $(SRC_DIR)/app/main.c \
           $(SRC_DIR)/ui/interface.c \
           $(SRC_DIR)/ui/ui_components.c \
@@ -24,7 +24,7 @@ SOURCES = $(SRC_DIR)/app/main.c \
 # Output
 TARGET = $(BIN_DIR)/main.exe
 
-# Rules
+# Regras
 all: $(TARGET)
 
 $(TARGET): $(SOURCES)
