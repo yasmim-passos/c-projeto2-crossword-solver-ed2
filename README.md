@@ -99,7 +99,8 @@ Aplicar na prática conceitos de:
 │   │   └── main.exe        # Executável final
 |
 ├── docs/
-|__ Makefile                # Script de compilação
+|   │   ├── Makefile        # Script de compilação
+|__ |   └── PalavrasCruzadas.pdf #Slide de Apresentação
 ```
 
 ---
