@@ -4,20 +4,13 @@
 #include "..\data\structs.h"
 #include <stdbool.h>
 
-/*
- * MÓDULO DE CONTROLE DE MODO DE JOGO
- * Este módulo gerencia o modo de jogo atual e o estado
- * de execução do solver.
- * Modos disponíveis:
- * - MODO_SOLVER: Solver automático resolve o puzzle
- * - MODO_USUARIO: Usuário joga manualmente
- */
+// MÓDULO DE CONTROLE DE MODO DE JOGO
 
 typedef enum {
-  SOLVER_PARADO = 0,     // Solver não está executando
-  SOLVER_EXECUTANDO = 1, // Solver está resolvendo
-  SOLVER_PAUSADO = 2,    // Solver pausado (para step-by-step)
-  SOLVER_CONCLUIDO = 3   // Solver terminou (com ou sem sucesso)
+  SOLVER_PARADO = 0,
+  SOLVER_EXECUTANDO = 1,
+  SOLVER_PAUSADO = 2, // Solver pausado (para step-by-step)
+  SOLVER_CONCLUIDO = 3
 } EstadoExecucaoSolver;
 
 // FUNÇÕES DE MODO DE JOGO
@@ -26,13 +19,6 @@ typedef enum {
 // Retorna: O modo de jogo atual (MODO_SOLVER ou MODO_USUARIO)
 ModoJogo obterModoAtual(void);
 
-/*
- * Define o modo de jogo
- * Parâmetros: modo - Novo modo de jogo a ser definido
- * Exemplo de uso:
- *   definirModo(MODO_SOLVER);  // Ativar solver automático
- *   definirModo(MODO_USUARIO); // Permitir usuário jogar
- */
 void definirModo(ModoJogo modo);
 
 // Verifica se está no modo solver

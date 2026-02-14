@@ -94,7 +94,6 @@ void DrawSolverStatus(bool is_running, int steps) {
     }
 }
 
-
 void UpdateInterface(Grid* grid, EstadoJogo* estado) {
     if (!grid) return;
     
@@ -165,6 +164,40 @@ void UpdateInterface(Grid* grid, EstadoJogo* estado) {
                  grid->celulas[selectedY][selectedX].letra = '\0';
                  grid->celulas[selectedY][selectedX].tipo = CELULA_VAZIA;
                  cellScales[selectedY][selectedX] = 0.8f; 
+            }
+        }
+    }
+}
+
+void RevealSelectedWord(Grid* grid) {
+    if (!grid || selectedX < 0 || selectedY < 0) return;
+
+    for (int i = 0; i < grid->numPalavras; i++) {
+        Palavra* p = &grid->palavras[i];
+        bool covers = false;
+        
+        if (p->direcao == DIRECAO_HORIZONTAL) {
+            if (p->inicio.linha == selectedY && 
+                selectedX >= p->inicio.coluna && 
+                selectedX < p->inicio.coluna + p->tamanho) {
+                covers = true;
+            }
+        } else {
+             if (p->inicio.coluna == selectedX && 
+                selectedY >= p->inicio.linha && 
+                selectedY < p->inicio.linha + p->tamanho) {
+                covers = true;
+            }
+        }
+
+        if (covers) {
+            // Fill the word
+            int r = p->inicio.linha;
+            int c = p->inicio.coluna;
+            for (int k = 0; k < p->tamanho; k++) {
+                grid->celulas[r][c].letra = p->resposta[k];
+                grid->celulas[r][c].tipo = CELULA_PREENCHIDA;
+                if (p->direcao == DIRECAO_HORIZONTAL) c++; else r++;
             }
         }
     }

@@ -84,17 +84,6 @@ bool validarConflitos(Grid *grid, Palavra *palavra);
 
 // FUNÇÕES UTILITÁRIAS
 
-/*
- * Conta quantas letras da palavra já estão corretas no grid
- * Útil para heurísticas de ordenação de palavras no solver.
- * Parâmetros:
- *   grid - Ponteiro para o grid
- *   palavra - Ponteiro para a estrutura Palavra
- *   texto - String com o texto da palavra
- * Retorna:
- *   Número de letras que já coincidem (0 a tamanho da palavra)
- */
 int contarLetrasCorretas(Grid *grid, Palavra *palavra, const char *texto);
-
 
 #endif // VALIDATION_H
