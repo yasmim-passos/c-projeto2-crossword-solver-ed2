@@ -3,16 +3,16 @@
 
 #include "../data/structs.h"
 
-// Initializes the API client
+// Inicializa a API do cliente
 void api_init(void);
 
-// Cleans up resources
+// Limpa recursos
 void api_cleanup(void);
 
-// Fetches a word definition from the API.
-// Uses char* buffers directly to be independent of specific struct versions if possible,
-// or avoids the old Word struct.
-// Returns true if found.
+// Obtém a definição de uma palavra da API.
+// Usa buffers char* diretamente para ser independente de versões específicas da struct, se possível,
+// ou evita a antiga struct Word.
+// Retorna verdadeiro se encontrado.
 bool fetch_word_definition(const char* word_text, char* out_definition, int max_len);
 
 #endif // API_CLIENT_H

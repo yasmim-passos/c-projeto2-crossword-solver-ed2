@@ -63,7 +63,7 @@ void DesenharTelaAjuda() {
     }
 }
 
-// Game Stats
+// Estados do jogo
 double startTime;
 int gameErrors = 0;
 int currentLevel = 1;
@@ -72,14 +72,13 @@ double grandTotalTime = 0;
 int grandTotalErrors = 0;
 char globalLanguage[4] = "PT";
 
-// Forward Declarations
 void FinalizeGrid(Grid* g);
 
-// Helper to mark unused cells as BLOCKED (Black) for better UI/Nav
+// Auxiliar para marcar cedulas nao usadas como BLOQUEADAS para melhor UI/Nav
 void FinalizeGrid(Grid* g) {
     bool used[TAMANHO_MAX_GRID][TAMANHO_MAX_GRID] = {0};
     
-    // Mark actively used cells
+    // Marca actively used cells
     for(int i=0; i<g->numPalavras; i++) {
         int r = g->palavras[i].inicio.linha;
         int c = g->palavras[i].inicio.coluna;
@@ -92,32 +91,32 @@ void FinalizeGrid(Grid* g) {
         }
     }
     
-    // Block unused
+    // Bloqueia nao usadas
     for(int r=0; r<TAMANHO_MAX_GRID; r++) {
         for(int c=0; c<TAMANHO_MAX_GRID; c++) {
             if (!used[r][c]) {
                 g->celulas[r][c].tipo = CELULA_BLOQUEADA;
-                g->celulas[r][c].letra = '\0'; // Ensure clean
+                g->celulas[r][c].letra = '\0';
             }
         }
     }
 }
 
-// Helper to auto-number grid sequentially
+// Auxiliar para auto-numerar grid de forma sequencial
 void RecalculateNumbers(Grid* g) {
     int nextNum = 1;
-    // Clear old numbers
+    // Limpar numeros velhos
     for(int y=0; y<g->linhas; y++) {
         for(int x=0; x<g->colunas; x++) {
             g->celulas[y][x].numero = 0;
         }
     }
     
-    // Assign numbers top-left to bottom-right
+    // Ordem crescente
     for(int y=0; y<g->linhas; y++) {
         for(int x=0; x<g->colunas; x++) {
             bool isStart = false;
-            // Check if any word starts here
+            // Checa se a palavra comeca aqui
             for(int i=0; i<g->numPalavras; i++) {
                 if (g->palavras[i].inicio.linha == y && g->palavras[i].inicio.coluna == x) {
                     isStart = true;
@@ -127,8 +126,7 @@ void RecalculateNumbers(Grid* g) {
             
             if (isStart) {
                 g->celulas[y][x].numero = nextNum;
-                // Update word struct with this number (so list matches grid)
-                // Note: Palavra struct doesn't have 'numero' field, it reads from cell.
+                // Atualiza a estrutura da palavra com o numero (e lista numeros na lista do grid)
                 nextNum++;
             }
         }
@@ -139,11 +137,9 @@ void LoadLevel(int level, Grid* g) {
     inicializarGrid(g, 15, 15);
     g->numPalavras = 0;
     
-    // Common Setup
-    // Only PT levels requested for progression. EN stays single large level for now.
     if (strcmp(globalLanguage, "PT") == 0) {
         if (level == 1) {
-            // LEVEL 1: NATUREZA (12 Words)
+            // NIVEL 1: (12 Palavras)
             g->palavras[0].inicio = (Posicao){4, 2}; g->palavras[0].direcao = DIRECAO_HORIZONTAL; g->palavras[0].tamanho = 8;
             colocarPalavra(g, &g->palavras[0], "FLORESTA"); strcpy(g->palavras[0].dica, "Grande area coberta de arvores."); g->numPalavras++;
 
@@ -181,7 +177,7 @@ void LoadLevel(int level, Grid* g) {
             colocarPalavra(g, &g->palavras[11], "PEDRA"); strcpy(g->palavras[11].dica, "Materia mineral dura."); g->numPalavras++;
         
         } else if (level == 2) {
-            // LEVEL 2: CIDADE (12 Words)
+            // NIVEL 2: (12 Palavras)
             g->palavras[0].inicio = (Posicao){7, 4}; g->palavras[0].direcao = DIRECAO_HORIZONTAL; g->palavras[0].tamanho = 6;
             colocarPalavra(g, &g->palavras[0], "CIDADE"); strcpy(g->palavras[0].dica, "Zona urbana."); g->numPalavras++;
 
@@ -215,34 +211,26 @@ void LoadLevel(int level, Grid* g) {
             g->palavras[10].inicio = (Posicao){5, 3}; g->palavras[10].direcao = DIRECAO_VERTICAL; g->palavras[10].tamanho = 4;
             colocarPalavra(g, &g->palavras[10], "REDE"); strcpy(g->palavras[10].dica, "Sistema de conexao."); g->numPalavras++;
 
-            // 12. MEDO (H) at 7,1
             g->palavras[11].inicio = (Posicao){7, 1}; g->palavras[11].direcao = DIRECAO_HORIZONTAL; g->palavras[11].tamanho = 4;
             colocarPalavra(g, &g->palavras[11], "MEDO"); strcpy(g->palavras[11].dica, "Reacao ao perigo."); g->numPalavras++;
 
-            // NEW WORDS (Target: 16)
-            // 13. POVO (V) at 9,10 (Connects to BANCO O at 12,10)
+            // NOVAS PALAVRAS (16 Palavras)
             g->palavras[12].inicio = (Posicao){9, 10}; g->palavras[12].direcao = DIRECAO_VERTICAL; g->palavras[12].tamanho = 4;
             colocarPalavra(g, &g->palavras[12], "POVO"); strcpy(g->palavras[12].dica, "Conjunto de pessoas."); g->numPalavras++;
 
-            // 14. CLUBE (H) at 0,8 (Safe Position)
             g->palavras[13].inicio = (Posicao){0, 8}; g->palavras[13].direcao = DIRECAO_HORIZONTAL; g->palavras[13].tamanho = 5;
             colocarPalavra(g, &g->palavras[13], "CLUBE"); strcpy(g->palavras[13].dica, "Associacao recreativa."); g->numPalavras++;
 
-            // 15. AREA (H) at 0,0 - Isolated corner
             g->palavras[14].inicio = (Posicao){0, 0}; g->palavras[14].direcao = DIRECAO_HORIZONTAL; g->palavras[14].tamanho = 4;
             colocarPalavra(g, &g->palavras[14], "AREA"); strcpy(g->palavras[14].dica, "Espaco delimitado."); g->numPalavras++;
 
-            // 16. AR (V) at 0,0 - Intersects AREA
             g->palavras[15].inicio = (Posicao){0, 0}; g->palavras[15].direcao = DIRECAO_VERTICAL; g->palavras[15].tamanho = 2;
             colocarPalavra(g, &g->palavras[15], "AR"); strcpy(g->palavras[15].dica, "O que respiramos."); g->numPalavras++;
 
-            // FIX CONFLICT: JOGO was at 11,6 (J) intersecting LOJA(L9..J11..). 
-            // LOJA J is at 11,7. JOGO at 11,6 means O is at 11,7. J!=O.
-            // Move JOGO to 11,7. J matches LOJA J.
-            g->palavras[5].inicio = (Posicao){11, 7}; // Update JOGO position
+            g->palavras[5].inicio = (Posicao){11, 7}; // Atualiza posicao do jogo
             
         } else if (level == 3) {
-            // LEVEL 3: UNIVERSO (Hard - 10 Words)
+            // LEVEL 3: (Dificil - 10 Palavras)
             g->palavras[0].inicio = (Posicao){7, 3}; g->palavras[0].direcao = DIRECAO_HORIZONTAL; g->palavras[0].tamanho = 8;
             colocarPalavra(g, &g->palavras[0], "UNIVERSO"); strcpy(g->palavras[0].dica, "Tudo o que existe."); g->numPalavras++;
             
@@ -273,43 +261,35 @@ void LoadLevel(int level, Grid* g) {
              g->palavras[9].inicio = (Posicao){7, 9}; g->palavras[9].direcao = DIRECAO_VERTICAL; g->palavras[9].tamanho = 6;
              colocarPalavra(g, &g->palavras[9], "SOMBRA"); strcpy(g->palavras[9].dica, "Bloqueio da luz."); g->numPalavras++;
 
-             // NEW WORDS (Target: 18+)
-             // 11. CEU (H) at 0,0
+             // NOVAS PALAVRAS (18+)
              g->palavras[10].inicio = (Posicao){0, 0}; g->palavras[10].direcao = DIRECAO_HORIZONTAL; g->palavras[10].tamanho = 3;
              colocarPalavra(g, &g->palavras[10], "CEU"); strcpy(g->palavras[10].dica, "A morada dos astros."); g->numPalavras++;
 
-             // 12. GAS (H) at 14,0
              g->palavras[11].inicio = (Posicao){14, 0}; g->palavras[11].direcao = DIRECAO_HORIZONTAL; g->palavras[11].tamanho = 3;
              colocarPalavra(g, &g->palavras[11], "GAS"); strcpy(g->palavras[11].dica, "Estado da materia das estrelas."); g->numPalavras++;
 
-             // 13. MARTE (V) at 0,14
              g->palavras[12].inicio = (Posicao){0, 14}; g->palavras[12].direcao = DIRECAO_VERTICAL; g->palavras[12].tamanho = 5;
              colocarPalavra(g, &g->palavras[12], "MARTE"); strcpy(g->palavras[12].dica, "Planeta vermelho."); g->numPalavras++;
 
-             // 14. VENUS (H) at 3,10
              g->palavras[13].inicio = (Posicao){3, 10}; g->palavras[13].direcao = DIRECAO_HORIZONTAL; g->palavras[13].tamanho = 5;
              colocarPalavra(g, &g->palavras[13], "VENUS"); strcpy(g->palavras[13].dica, "Planeta vizinho."); g->numPalavras++;
              
-             // 15. ROCHA (V) at 10,0 
              g->palavras[14].inicio = (Posicao){10, 0}; g->palavras[14].direcao = DIRECAO_VERTICAL; g->palavras[14].tamanho = 5;
              colocarPalavra(g, &g->palavras[14], "ROCHA"); strcpy(g->palavras[14].dica, "Material de asteroides."); g->numPalavras++;
 
-             // 16. TERRA (H) at 14,8 
              g->palavras[15].inicio = (Posicao){14, 8}; g->palavras[15].direcao = DIRECAO_HORIZONTAL; g->palavras[15].tamanho = 5;
              colocarPalavra(g, &g->palavras[15], "TERRA"); strcpy(g->palavras[15].dica, "Nosso planeta."); g->numPalavras++;
              
-             // 17. LUA (H) at 5,0
              g->palavras[16].inicio = (Posicao){5, 0}; g->palavras[16].direcao = DIRECAO_HORIZONTAL; g->palavras[16].tamanho = 3;
              colocarPalavra(g, &g->palavras[16], "LUA"); strcpy(g->palavras[16].dica, "Satelite natural."); g->numPalavras++;
 
-             // 18. SOL (V) at 5,12
              g->palavras[17].inicio = (Posicao){5, 12}; g->palavras[17].direcao = DIRECAO_VERTICAL; g->palavras[17].tamanho = 3;
              colocarPalavra(g, &g->palavras[17], "SOL"); strcpy(g->palavras[17].dica, "Estrela do sistema."); g->numPalavras++;
         }
     } else {
         // EN Layout - 3 Levels
         if (level == 1) {
-            // LEVEL 1: NATURE (12 Words)
+            // LEVEL 1: (12 Words)
             g->palavras[0].inicio = (Posicao){4, 2}; g->palavras[0].direcao = DIRECAO_HORIZONTAL; g->palavras[0].tamanho = 4;
             colocarPalavra(g, &g->palavras[0], "TREE"); strcpy(g->palavras[0].dica, "Tall plant with trunk and leaves."); g->numPalavras++;
 
@@ -347,7 +327,7 @@ void LoadLevel(int level, Grid* g) {
             colocarPalavra(g, &g->palavras[11], "KEY"); strcpy(g->palavras[11].dica, "Used to open locks."); g->numPalavras++; // Filler to reach 12
 
         } else if (level == 2) {
-            // LEVEL 2: CITY (16 Words)
+            // LEVEL 2: (16 Words)
             g->palavras[0].inicio = (Posicao){5, 5}; g->palavras[0].direcao = DIRECAO_HORIZONTAL; g->palavras[0].tamanho = 4;
             colocarPalavra(g, &g->palavras[0], "CITY"); strcpy(g->palavras[0].dica, "Large town."); g->numPalavras++;
 
@@ -397,7 +377,7 @@ void LoadLevel(int level, Grid* g) {
             colocarPalavra(g, &g->palavras[15], "ZOO"); strcpy(g->palavras[15].dica, "Place with animals."); g->numPalavras++;
 
         } else if (level == 3) {
-            // LEVEL 3: SPACE (18 Words)
+            // LEVEL 3: (18 Words)
             g->palavras[0].inicio = (Posicao){7, 2}; g->palavras[0].direcao = DIRECAO_HORIZONTAL; g->palavras[0].tamanho = 8;
             colocarPalavra(g, &g->palavras[0], "UNIVERSE"); strcpy(g->palavras[0].dica, "All existence."); g->numPalavras++;
 
@@ -458,10 +438,10 @@ void LoadLevel(int level, Grid* g) {
     
     gameErrors = 0;
     startTime = GetTime();
-    RecalculateNumbers(g); // AUTO-FIX NUMBERS
-    FinalizeGrid(g);       // MARK UNUSED AS BLACK
+    RecalculateNumbers(g); // AUTO-AJUSTA NUMEROS
+    FinalizeGrid(g);       // MARCA NAO USADOS
     
-    // Sort words by their grid number (ascending)
+    // Sorteia palavras pelo numero do grid
     for(int i=0; i<g->numPalavras-1; i++) {
         for(int j=0; j<g->numPalavras-i-1; j++) {
             int numA = g->celulas[g->palavras[j].inicio.linha][g->palavras[j].inicio.coluna].numero;
@@ -534,11 +514,11 @@ int main() {
                 
             case CENA_JOGO:
                 if (gameOver) {
-                    // VICTORY SCREEN
+                    // TELA DE VITORIA
                     DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), Fade(UI_COLOR_BG, 0.9f));
                     
                     if (currentLevel < maxLevels) {
-                         // Next Level Screen
+                         // Tela de proximo nivel
                          DrawTextCentered("NIVEL CONCLUIDO!", GetScreenWidth()/2, 200, 40, UI_COLOR_PRIMARY);
                          
                          char scoreStr[64];
@@ -553,7 +533,7 @@ int main() {
                              gameOver = false; palavrasCorretas = 0;
                          }
                     } else {
-                         // FINAL VICTORY
+                         // VITORIA FINAL
                          DrawTextCentered("PARABENS! VOCE VENCEU!", GetScreenWidth()/2, 100, 40, UI_COLOR_PRIMARY);
                          
                          char totalStr[100];
@@ -577,7 +557,7 @@ int main() {
                     // Grid
                     DrawCrosswordGrid(g, 50, 100, 32); 
                     
-                    // Clues
+                    // Dicas
                     int colDicas = 550;
                     int startY = 100;
                     
@@ -597,7 +577,7 @@ int main() {
                         }
                     }
 
-                    startY = 400; // Fixed start for vertical
+                    startY = 400;
                     DrawText("VERTICAIS", colDicas, startY, 20, UI_COLOR_PRIMARY);
                     DrawLine(colDicas, startY + 25, 950, startY + 25, UI_COLOR_PRIMARY);
                     startY += 30;

@@ -8,11 +8,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-// ========== FUNÇÕES INTERNAS (PRIVADAS) ==========
+// FUNÇÕES INTERNAS (PRIVADAS)
 
 /*
  * Função recursiva de backtracking
- *
  * Esta é a função central do algoritmo. Ela tenta preencher
  * cada palavra do puzzle recursivamente, fazendo backtrack
  * quando não encontra solução.
@@ -20,28 +19,18 @@
 static bool backtrack(Grid *grid, int indicePalavra, EstadoSolver *estado);
 
 /*
- * Encontra a próxima palavra vazia a ser preenchida
- *
- * Retorna o índice da próxima palavra que ainda não foi
- * completamente preenchida, ou -1 se todas estão completas.
- */
-// static int encontrarProximaPalavraVazia(Grid *grid);
-
-/*
  * Obtém candidatos do dicionário para uma palavra
- *
  * Busca no dicionário palavras com o tamanho correto
  * que podem ser candidatas para preencher a posição.
  */
 static void obterCandidatos(int tamanho, char ***candidatos,
                             int *numCandidatos);
 
-/*
- * Libera memória alocada para lista de candidatos
- */
+
+// Libera memória alocada para lista de candidatos
 static void liberarCandidatos(char **candidatos, int numCandidatos);
 
-// ========== IMPLEMENTAÇÃO DAS FUNÇÕES PÚBLICAS ==========
+// FUNÇÕES PÚBLICAS
 
 bool resolverPuzzle(Grid *grid, EstadoSolver *estado) {
   if (grid == NULL || estado == NULL) {
@@ -147,7 +136,7 @@ bool verificarSolucao(Grid *grid) {
   return gridEstaCompleto(grid);
 }
 
-// ========== IMPLEMENTAÇÃO DAS FUNÇÕES INTERNAS ==========
+// FUNÇÕES INTERNAS
 
 static bool backtrack(Grid *grid, int indicePalavra, EstadoSolver *estado) {
   // Atualizar profundidade
@@ -217,26 +206,6 @@ static bool backtrack(Grid *grid, int indicePalavra, EstadoSolver *estado) {
   // Nenhum candidato funcionou
   return false;
 }
-
-/*
-static int encontrarProximaPalavraVazia(Grid *grid) {
-  if (grid == NULL) {
-    return -1;
-  }
-
-  // Procurar primeira palavra não completa
-  for (int i = 0; i < grid->numPalavras; i++) {
-    Palavra *palavra = obterPalavra(grid, i);
-
-    if (palavra != NULL && !palavra->estaCompleta) {
-      return i;
-    }
-  }
-
-  // Todas as palavras estão completas
-  return -1;
-}
-*/
 
 static void obterCandidatos(int tamanho, char ***candidatos,
                             int *numCandidatos) {

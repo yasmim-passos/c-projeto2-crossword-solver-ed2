@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// ========== FUNÇÃO PRINCIPAL DE VALIDAÇÃO ==========
+// FUNÇÃO PRINCIPAL DE VALIDAÇÃO
 
 bool validarPalavra(Grid *grid, Palavra *palavra, const char *texto) {
   // Validação de parâmetros
@@ -36,7 +36,7 @@ bool validarPalavra(Grid *grid, Palavra *palavra, const char *texto) {
   return true;
 }
 
-// ========== VALIDAÇÕES ESPECÍFICAS ==========
+// VALIDAÇÕES ESPECÍFICAS
 
 bool validarTamanho(Palavra *palavra, const char *texto) {
   if (palavra == NULL || texto == NULL) {
@@ -164,7 +164,7 @@ bool validarIntersecoes(Grid *grid, Palavra *palavra, const char *texto) {
   return true;
 }
 
-// ========== FUNÇÕES UTILITÁRIAS ==========
+// FUNÇÕES UTILITÁRIAS
 
 int contarLetrasCorretas(Grid *grid, Palavra *palavra, const char *texto) {
   if (grid == NULL || palavra == NULL || texto == NULL) {

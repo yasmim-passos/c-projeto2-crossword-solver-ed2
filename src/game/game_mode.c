@@ -1,21 +1,17 @@
 #include "game_mode.h"
 #include <stddef.h>
 
-// ========== VARIÁVEIS GLOBAIS (ESTADO DO MÓDULO) ==========
+// VARIÁVEIS GLOBAIS (ESTADO DO MÓDULO)
 
-/*
- * Modo de jogo atual
- * Inicializado como MODO_USUARIO (usuário joga manualmente)
- */
+// Modo de jogo atual
+// Inicializado como MODO_USUARIO (usuário joga manualmente)
 static ModoJogo modoAtual = MODO_USUARIO;
 
-/*
- * Estado de execução do solver
- * Inicializado como SOLVER_PARADO
- */
+// Estado de execução do solver
+// Inicializado como SOLVER_PARADO
 static EstadoExecucaoSolver estadoSolver = SOLVER_PARADO;
 
-// ========== IMPLEMENTAÇÃO - FUNÇÕES DE MODO DE JOGO ==========
+// MODO DE JOGO
 
 ModoJogo obterModoAtual(void) { return modoAtual; }
 
@@ -32,7 +28,7 @@ bool estaModoSolver(void) { return (modoAtual == MODO_SOLVER); }
 
 bool estaModoUsuario(void) { return (modoAtual == MODO_USUARIO); }
 
-// ========== IMPLEMENTAÇÃO - FUNÇÕES DE ESTADO DO SOLVER ==========
+// ESTADO DO SOLVER
 
 EstadoExecucaoSolver obterEstadoSolver(void) { return estadoSolver; }
 
@@ -51,7 +47,7 @@ bool solverEstaPausado(void) { return (estadoSolver == SOLVER_PAUSADO); }
 
 bool solverConcluiu(void) { return (estadoSolver == SOLVER_CONCLUIDO); }
 
-// ========== IMPLEMENTAÇÃO - FUNÇÕES UTILITÁRIAS ==========
+// FUNÇÕES UTILITÁRIAS
 
 void resetarModoJogo(void) {
   modoAtual = MODO_USUARIO;

@@ -22,10 +22,10 @@ bool GuiButton(Rectangle rect, const char* text) {
 
     Rectangle drawRect = rect;
     if (isPressed) {
-        drawRect.y += 2; // Press effect
+        drawRect.y += 2;
     }
 
-    // Shadow
+    // Sombra
     if (!isPressed) {
         DrawRectangleRounded((Rectangle){rect.x, rect.y + 4, rect.width, rect.height}, 0.2f, 10, Fade(GRAY, 0.5f));
     }
@@ -43,9 +43,9 @@ bool GuiButton(Rectangle rect, const char* text) {
 }
 
 void GuiPanel(Rectangle rect) {
-    // Shadow
+    // Sombra
     DrawRectangleRounded((Rectangle){rect.x + 4, rect.y + 4, rect.width, rect.height}, 0.05f, 10, Fade(GRAY, 0.3f));
-    // Main Body
+    // Corpo principal
     DrawRectangleRounded(rect, 0.05f, 10, WHITE);
 }
 
@@ -59,10 +59,10 @@ void DrawTextWrapped(const char *text, Rectangle rec, int fontSize, Color color)
 
     int currentLineY = (int)rec.y;
     int currentLineX = (int)rec.x;
-    int lineHeight = fontSize + 4; // Add some spacing
+    int lineHeight = fontSize + 4; // Adiciona um espaco
     
-    // Copy text to modify or parse
-    // We will parse character by character to handle \n and spaces
+    // Copia texto para modificar ou passar
+    // Nos vamos passar caracter por caracter para lidar com \n e espacos
     const char* ptr = text;
     char wordBuffer[256];
     int wordLen = 0;
@@ -71,26 +71,23 @@ void DrawTextWrapped(const char *text, Rectangle rec, int fontSize, Color color)
     
     while (*ptr != '\0') {
         if (*ptr == '\n') {
-            // Force line break
-            // Draw current line
             if (strlen(lineBuffer) > 0) {
                  DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
             }
             currentLineY += lineHeight;
-            strcpy(lineBuffer, ""); // Reset line
-            ptr++; // Skip \n
+            strcpy(lineBuffer, ""); // Reseta linha
+            ptr++; // Pula \n
             continue;
         }
         
-        // Read word
+        // Le palavra
         wordLen = 0;
-        // const char* startWord = ptr; // Unused
         while (*ptr != ' ' && *ptr != '\n' && *ptr != '\0') {
              wordBuffer[wordLen++] = *ptr++;
         }
         wordBuffer[wordLen] = '\0';
         
-        // Check if word fits
+        // Checa se palavra encaixa
         const char* space = (strlen(lineBuffer) > 0) ? " " : "";
         int currentW = MeasureText(lineBuffer, fontSize);
         int wordW = MeasureText(wordBuffer, fontSize);
@@ -99,7 +96,6 @@ void DrawTextWrapped(const char *text, Rectangle rec, int fontSize, Color color)
         int totalW = currentW + (strlen(space) > 0 ? spaceW : 0) + wordW;
         
         if (totalW > rec.width) {
-            // Draw current line and clear
             DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
             currentLineY += lineHeight;
             strcpy(lineBuffer, wordBuffer);
@@ -108,10 +104,10 @@ void DrawTextWrapped(const char *text, Rectangle rec, int fontSize, Color color)
             strcat(lineBuffer, wordBuffer);
         }
         
-        if (*ptr == ' ') ptr++; // Skip space
+        if (*ptr == ' ') ptr++; // Pula espaco
     }
     
-    // Draw last line
+    // Desenha ultima linha
     if (strlen(lineBuffer) > 0) {
         DrawText(lineBuffer, currentLineX, currentLineY, fontSize, color);
     }
