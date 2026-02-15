@@ -14,7 +14,7 @@ Aplicar na prática conceitos de:
 * Estruturas de dados em grid
 * Validação de restrições
 * Internacionalização (PT/EN)
-* Integração com API de dicionário (Simulada/Local)
+* Integração com API de dicionário
 * Visualização de algoritmos
 
 ---
@@ -111,9 +111,10 @@ Aplicar na prática conceitos de:
 
 ✅ **Concluído**
 - [x] Interface Gráfica (Raylib)
-- [x] Lógica de Jogo (3 Níveis PT / 3 Níveis EN)
+- [x] Lógica de Jogo (Níveis Infinitos PT / EN)
 - [x] Backtracking/Solver
-- [x] Sistema de Dicas
+- [x] Sistema de Dicas (Significado Palavras)
+- [x] Sistema para pular palavra 
 - [x] Internacionalização
 - [x] Navegação por Teclado e Mouse
 
@@ -126,4 +127,5 @@ Aplicar na prática conceitos de:
 * Igor Dias ([@iidias](https://github.com/iidias/))
 * Yasmim Passos ([@yasmim-passos](https://github.com/yasmim-passos/))
 
-Projeto realizado em grupo como atividade avaliativa da disciplina de Estrutura de Dados II, na Universidade Federal de Sergipe (UFS).
+
+Projeto realizado em grupo como atividade avaliativa da disciplina de Estrutura de Dados II na Universidade Federal de Sergipe (UFS).
