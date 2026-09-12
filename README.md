@@ -103,7 +103,7 @@ Aplicar na prática conceitos de:
 ├── docs/
 |   │   ├── Makefile        # Script de compilação
 |__ |   └── PalavrasCruzadas.pdf #Slide de Apresentação
-
+```
 
 ---
 
